@@ -1,5 +1,4 @@
-// /app/api/analytics/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
 import { getLocationInfo } from "@/app/lib/utils";
 // import { generateMockVisitors } from "@/app/lib/mockData";
@@ -10,7 +9,7 @@ export async function GET() {
   return NextResponse.json(visitors);
 }
 
-export async function POST(request: NextResponse) {
+export async function POST(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
 
   requestHeaders.forEach((value, key) => {
