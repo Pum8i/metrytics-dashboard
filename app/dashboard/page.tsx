@@ -75,8 +75,9 @@ export default function Dashboard() {
 
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
+                variant={"outline"}
                 className="cursor-pointer"
                 onClick={fetchData}
                 disabled={loading}

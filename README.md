@@ -39,6 +39,14 @@ pnpm db:generate
 pnpm db:push
 ```
 
+n.b. if you get the `error: function uuid_generate_v4() does not exist`, you might need to run
+
+```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+```
+
+in your database to enable `uuid-ossp` extension
+
 5. Start the development server:
 
 ```bash

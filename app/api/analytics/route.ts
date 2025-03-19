@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { appName, browser, ipAddress, os, page, referrer, timestamp } = body;
-    console.log("🚀 ~ POST ~ body:", body);
 
     // TODO - need to add in some validation?
     // Validate the body (example: check if required fields are present)
