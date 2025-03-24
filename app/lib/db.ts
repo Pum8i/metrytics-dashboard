@@ -1,12 +1,12 @@
-import "server-only";
-
-import { visitors } from "@/drizzle/schema";
+import { user, visitors } from "@/drizzle/schema";
 import { neon } from "@neondatabase/serverless";
-import { eq, desc } from "drizzle-orm";
+import { genSaltSync, hashSync } from "bcrypt-ts";
+import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-http";
 import { IVisitorData } from "../types";
 
-export const db = drizzle(neon(process.env.POSTGRES_URL!));
+const client = neon(`${process.env.POSTGRES_URL!}`);
+export const db = drizzle(client);
 
 export async function getVisitors(): Promise<{
   visitors: IVisitorData[];
@@ -57,4 +57,15 @@ export async function addVisitor(visitor: Omit<IVisitorData, "id">) {
 
 export async function deleteVisitorById(id: string) {
   await db.delete(visitors).where(eq(visitors.id, id));
+}
+
+export async function getUser(email: string) {
+  return await db.select().from(user).where(eq(user.email, email));
+}
+
+export async function createUser(email: string, password: string) {
+  const salt = genSaltSync(10);
+  const hash = hashSync(password, salt);
+
+  return await db.insert(user).values({ email, password: hash }).returning();
 }

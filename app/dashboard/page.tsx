@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { IVisitorData, IAnalyticsSummary } from "@/app/types";
 import ClientCard from "@/app/components/ClientCard";
-import StatsCard from "@/app/components/StatsCard";
 import DataTable from "@/app/components/DataTable";
+import StatsCard from "@/app/components/StatsCard";
+import { IAnalyticsSummary, IVisitorData } from "@/app/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,14 +12,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-import { RefreshCw } from "lucide-react";
+import { LogOut, RefreshCw } from "lucide-react";
+import { useActionState, useEffect, useState } from "react";
+import { logout } from "../lib/actions";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
   const [summary, setSummary] = useState<IAnalyticsSummary | null>(null);
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
+  const [, formAction, isPending] = useActionState(logout, undefined);
 
   const fetchData = async () => {
     try {
@@ -68,10 +69,8 @@ export default function Dashboard() {
           <div className="text-2xl font-semibold">Refreshing data...</div>
         </div>
       )}
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold mb-8 text-white">
-          Analytics Dashboard
-        </h1>
+      <div className="flex justify-between gap-4">
+        <h1 className="text-3xl font-bold mb-8 grow">Analytics Dashboard</h1>
 
         <TooltipProvider>
           <Tooltip>
@@ -83,9 +82,31 @@ export default function Dashboard() {
                 disabled={loading}
               >
                 <RefreshCw className={loading ? "animate-spin" : ""} />
+                <div className="hidden md:block">Refresh Data</div>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent className="md:hidden">
+              <p>Refresh Data</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <form action={formAction}>
+                <Button
+                  variant={"outline"}
+                  className="cursor-pointer"
+                  type="submit"
+                  disabled={isPending}
+                >
+                  <LogOut />
+                  <div className="hidden md:block">Sign Out</div>
+                </Button>
+              </form>
+            </TooltipTrigger>
+            <TooltipContent className="md:hidden">
               <p>Refresh Data</p>
             </TooltipContent>
           </Tooltip>

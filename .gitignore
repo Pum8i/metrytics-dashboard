@@ -44,4 +44,6 @@ next-env.d.ts
 /drizzle/meta
 /drizzle/migrations
 
+/.vscode/
+
 /app/api/testing
