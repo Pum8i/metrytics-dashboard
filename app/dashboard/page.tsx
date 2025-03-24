@@ -1,10 +1,9 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { IVisitorData, IAnalyticsSummary } from "@/app/types";
 import ClientCard from "@/app/components/ClientCard";
-import StatsCard from "@/app/components/StatsCard";
 import DataTable from "@/app/components/DataTable";
+import StatsCard from "@/app/components/StatsCard";
+import { IAnalyticsSummary, IVisitorData } from "@/app/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,7 +12,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { LogOut, Power, RefreshCw } from "lucide-react";
+import { LogOut, RefreshCw } from "lucide-react";
+import { useActionState, useEffect, useState } from "react";
 import { logout } from "../lib/actions";
 
 export default function Dashboard() {
@@ -21,10 +21,7 @@ export default function Dashboard() {
   const [summary, setSummary] = useState<IAnalyticsSummary | null>(null);
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorMessage, formAction, isPending] = useActionState(
-    logout,
-    undefined
-  );
+  const [, formAction, isPending] = useActionState(logout, undefined);
 
   const fetchData = async () => {
     try {

@@ -34,7 +34,7 @@ const getStringValues = (
         button: "Login",
         link: (
           <>
-            Don't have an account?
+            Don&apos;t have an account?
             <Button
               variant="link"
               onClick={handleChangeLoginRegister}

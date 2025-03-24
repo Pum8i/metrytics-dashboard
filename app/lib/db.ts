@@ -5,8 +5,8 @@ import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-http";
 import { IVisitorData } from "../types";
 
-let client = neon(`${process.env.POSTGRES_URL!}`);
-let db = drizzle(client);
+const client = neon(`${process.env.POSTGRES_URL!}`);
+export const db = drizzle(client);
 
 export async function getVisitors(): Promise<{
   visitors: IVisitorData[];
@@ -64,8 +64,8 @@ export async function getUser(email: string) {
 }
 
 export async function createUser(email: string, password: string) {
-  let salt = genSaltSync(10);
-  let hash = hashSync(password, salt);
+  const salt = genSaltSync(10);
+  const hash = hashSync(password, salt);
 
   return await db.insert(user).values({ email, password: hash }).returning();
 }
