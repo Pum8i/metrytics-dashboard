@@ -1,5 +1,12 @@
+import {
+  pgTable,
+  uuid,
+  text,
+  timestamp,
+  serial,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const visitors = pgTable("visitors", {
   id: uuid()
@@ -13,4 +20,10 @@ export const visitors = pgTable("visitors", {
   page: text("page").notNull(),
   referrer: text("referrer").notNull(),
   timestamp: timestamp("timestamp").notNull(),
+});
+
+export const user = pgTable("User", {
+  id: serial().primaryKey().notNull(),
+  email: varchar({ length: 64 }),
+  password: varchar({ length: 64 }),
 });

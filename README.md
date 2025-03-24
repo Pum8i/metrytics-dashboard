@@ -9,6 +9,7 @@ A simple analytics dashboard and server, built with Next.js to receive and displ
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **UI Components:** [Customized shadcn/ui components](https://ui.shadcn.com/)
 - **Hosting/Database:** Has been built with hosting on [Vercel](https://vercel.com) and using the [Neon Serverless Postgres](https://vercel.com/marketplace/neon) database
+- **Auth:** [NextAuth.js](https://next-auth.js.org/)
 
 ## Features
 
