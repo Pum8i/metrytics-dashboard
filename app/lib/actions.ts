@@ -52,7 +52,7 @@ export async function register(
         if (newUser.length === 0) {
           return "Error Creating User - Please contact your administrator.";
         }
-        redirect("/");
+        redirect("/login");
       }
     }
     return "Error Creating User";

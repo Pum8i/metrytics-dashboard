@@ -1,12 +1,16 @@
 export interface IVisitorData {
   id: string;
-  timestamp: Date;
   app_name: string;
-  ip_address: string;
   browser_os: string;
+  browser: string;
+  city: string;
+  country: string;
+  ip_address: string;
   location: string;
+  os: string;
   page: string;
   referrer: string;
+  timestamp: Date;
 }
 
 export interface IAnalyticsSummary {
