@@ -89,7 +89,7 @@ export function LoginForm({
   );
 
   return (
-    <div
+    <main
       className={cn(
         "flex flex-col gap-6 m-auto w-full max-w-md h-screen justify-center",
         className
@@ -98,7 +98,9 @@ export function LoginForm({
     >
       <Card>
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
+          <CardTitle role="heading" aria-level={1}>
+            {title}
+          </CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -146,6 +148,6 @@ export function LoginForm({
           </form>
         </CardContent>
       </Card>
-    </div>
+    </main>
   );
 }

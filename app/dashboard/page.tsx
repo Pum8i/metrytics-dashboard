@@ -1,8 +1,8 @@
 "use client";
 
-import ClientCard from "@/app/components/ClientCard";
-import DataTable from "@/app/components/DataTable";
-import StatsCard from "@/app/components/StatsCard";
+import ClientCard from "@/components/client-card";
+import DataTable from "@/components/data-table";
+import StatsCard from "@/components/stats-card";
 import { IAnalyticsSummary, IVisitorData } from "@/app/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

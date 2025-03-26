@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="min-h-screen ">
+    <main className="min-h-screen ">
       <div className="container mx-auto px-4 py-8">
         <nav className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-2">
@@ -22,7 +22,7 @@ export default function Home() {
           </div>
         </nav>
 
-        <div className="flex flex-col md:flex-row items-center justify-between py-8 md:py-12 lg:py-16">
+        <section className="flex flex-col md:flex-row items-center justify-between py-8 md:py-12 lg:py-16">
           <div className="md:w-1/2 md:pr-12">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
               Understand your website traffic with simple analytics
@@ -45,9 +45,9 @@ export default function Home() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="py-4 lg:py-8">
+        <section className="py-4 lg:py-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground mb-8 md:mb-12">
             Analytics made simple
           </h2>
@@ -66,7 +66,7 @@ export default function Home() {
               </Card>
             ))}
           </div>
-        </div>
+        </section>
 
         <footer className="pt-6 border-t border-border mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
@@ -89,7 +89,7 @@ export default function Home() {
           </div>
         </footer>
       </div>
-    </div>
+    </main>
   );
 }
 
