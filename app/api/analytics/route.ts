@@ -1,7 +1,8 @@
+"use server";
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
 import { getLocationInfo } from "@/app/lib/utils";
-import { geolocation, ipAddress } from "@vercel/functions";
+import { ipAddress } from "@vercel/functions";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
 
@@ -15,9 +16,13 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   const { browser, cpu, device, os, engine } = userAgent(request);
-  const { city, country, flag } = geolocation(request);
+  // const { city, country, flag } = geolocation(request);
   const ip = ipAddress(request);
   const referrer = requestHeaders.get("referrer");
+
+  const city = request.headers.get("x-vercel-ip-city") || "unknown";
+  const country = request.headers.get("x-vercel-ip-country") || "unknown";
+  const realIp = request.headers.get("x-real-ip") || "unknown";
 
   console.log("User Agent:", {
     browser,
@@ -27,8 +32,8 @@ export async function POST(request: NextRequest) {
     engine,
     city,
     country,
-    flag,
     ip,
+    realIp,
     referrer,
   });
 
@@ -60,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     const { location } = await getLocationInfo(body.ipAddress);
 
-    const addedVisitor = await addVisitor({
+    const visitor = {
       app_name: appName,
       city: city ?? "unknown",
       country: country ?? "unknown",
@@ -72,7 +77,11 @@ export async function POST(request: NextRequest) {
       timestamp: new Date(timestamp),
       page,
       location,
-    });
+    };
+
+    console.log("addedVisitor response:", visitor);
+
+    const addedVisitor = await addVisitor(visitor);
 
     console.log("addedVisitor response:", addedVisitor);
 
