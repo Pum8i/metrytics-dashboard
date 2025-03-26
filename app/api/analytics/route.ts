@@ -18,13 +18,14 @@ export async function POST(request: NextRequest) {
   const { browser, cpu, device, os, engine } = userAgent(request);
   // const { city, country, flag } = geolocation(request);
   const ip = ipAddress(request);
-  const referrer = requestHeaders.get("referrer");
+  const referrer = requestHeaders.get("referrer") || "unknown";
 
   const city = request.headers.get("x-vercel-ip-city") || "unknown";
   const country = request.headers.get("x-vercel-ip-country") || "unknown";
   const realIp = request.headers.get("x-real-ip") || "unknown";
 
-  console.log("User Agent:", {
+  console.log(
+    "User Agent:",
     browser,
     cpu,
     device,
@@ -34,12 +35,8 @@ export async function POST(request: NextRequest) {
     country,
     ip,
     realIp,
-    referrer,
-  });
-
-  // requestHeaders.forEach((value, key) => {
-  //   console.log(`${key}: ${value}`);
-  // });
+    referrer
+  );
 
   try {
     const apiKey = request.headers.get("x-api-key");
@@ -63,18 +60,18 @@ export async function POST(request: NextRequest) {
     //   );
     // }
 
-    const { location } = await getLocationInfo(body.ipAddress);
+    const { location } = await getLocationInfo(ip ?? "");
 
     const visitor = {
       app_name: appName,
-      city: city ?? "unknown",
-      country: country ?? "unknown",
+      city,
+      country,
       ip_address: ip ?? "unknown",
       browser_os: `${browser?.name ?? "unknown"}/${os?.name ?? "unknown"}`,
       browser: browser?.name ?? "unknown",
       os: os?.name ?? "unknown",
       referrer: referrer ?? "unknown",
-      timestamp: new Date(timestamp),
+      timestamp: timestamp ? new Date(timestamp) : new Date(),
       page,
       location,
     };
