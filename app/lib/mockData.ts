@@ -44,14 +44,14 @@ export const generateMockVisitors = (
       timestamp: new Date(
         Date.now() - Math.floor(Math.random() * 7 * 24 * 60 * 60 * 1000)
       ),
-      ipAddress: `${Math.floor(Math.random() * 255)}.${Math.floor(
-        Math.random() * 255
-      )}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
       location: `${city}/${country}`,
+      city: city,
+      country: country,
       browser_os: `${browser}/${operatingSystem}`,
+      browser: browser,
+      os: operatingSystem,
       page,
       referrer,
-      duration: Math.floor(Math.random() * 300),
     };
   });
 
