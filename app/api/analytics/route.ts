@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       location,
     });
 
-    // console.log("addedVisitor response:", addedVisitor);
+    console.log("addedVisitor response:", addedVisitor);
 
     return NextResponse.json({ message: "POST request received" });
   } catch (error) {
