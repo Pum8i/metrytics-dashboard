@@ -1,7 +1,7 @@
 "use server";
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
-import { getLocationInfo } from "@/app/lib/utils";
+import { getBrowserInfo, getLocationInfo } from "@/app/lib/utils";
 import { ipAddress } from "@vercel/functions";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
@@ -60,16 +60,19 @@ export async function POST(request: NextRequest) {
     //   );
     // }
 
-    const { location } = await getLocationInfo(ip ?? "");
+    const { city, country, location } = await getLocationInfo(ip ?? "");
+    const { browserName, browserVersion, osName } = getBrowserInfo(
+      requestHeaders.get("userAgent") ?? ""
+    );
 
     const visitor = {
       app_name: appName,
-      city,
-      country,
+      city: city ?? "unknown",
+      country: country ?? "unknown",
       ip_address: ip ?? "unknown",
       browser_os: `${browser?.name ?? "unknown"}/${os?.name ?? "unknown"}`,
-      browser: browser?.name ?? "unknown",
-      os: os?.name ?? "unknown",
+      browser: browser?.name ?? browserName ?? "unknown",
+      os: os?.name ?? osName ?? "unknown",
       referrer: referrer ?? "unknown",
       timestamp: timestamp ? new Date(timestamp) : new Date(),
       page,
