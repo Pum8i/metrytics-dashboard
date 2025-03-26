@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     // }
 
     const { city, country, location } = await getLocationInfo(ip ?? "");
-    const { browserName, browserVersion, osName } = getBrowserInfo(
+    const { browserName, osName } = getBrowserInfo(
       requestHeaders.get("userAgent") ?? ""
     );
 
