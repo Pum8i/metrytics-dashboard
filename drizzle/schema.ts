@@ -16,13 +16,17 @@ export const visitors = pgTable("visitors", {
   app_name: text("app_name").notNull(),
   ip_address: text("ip_address").notNull(),
   location: text("location").notNull(),
+  city: text("city").notNull(),
+  country: text("country").notNull(),
   browser_os: text("browser_os").notNull(),
+  browser: text("browser").notNull(),
+  os: text("os").notNull(),
   page: text("page").notNull(),
   referrer: text("referrer").notNull(),
   timestamp: timestamp("timestamp").notNull(),
 });
 
-export const user = pgTable("User", {
+export const user = pgTable("user", {
   id: serial().primaryKey().notNull(),
   email: varchar({ length: 64 }),
   password: varchar({ length: 64 }),

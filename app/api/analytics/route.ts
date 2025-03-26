@@ -1,9 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
 import { getLocationInfo } from "@/app/lib/utils";
+import { geolocation, ipAddress } from "@vercel/functions";
+
 // import { generateMockVisitors } from "@/app/lib/mockData";
 
 export async function GET() {
+  // TODO Update mock to include new fields
   // const visitors = generateMockVisitors(10);
   const visitors = await getVisitors();
   return NextResponse.json(visitors);
@@ -11,10 +14,28 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
+  const { browser, cpu, device, os, engine } = userAgent(request);
+  const { city, country, flag } = geolocation(request);
+  const ip = ipAddress(request);
+  const referrer = requestHeaders.get("referrer");
 
-  requestHeaders.forEach((value, key) => {
-    console.log(`${key}: ${value}`);
+  console.log("User Agent:", {
+    browser,
+    cpu,
+    device,
+    os,
+    engine,
+    city,
+    country,
+    flag,
+    ip,
+    referrer,
   });
+
+  // requestHeaders.forEach((value, key) => {
+  //   console.log(`${key}: ${value}`);
+  // });
+
   try {
     const apiKey = request.headers.get("x-api-key");
 
@@ -26,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { appName, browser, ipAddress, os, page, referrer, timestamp } = body;
+    const { appName, page, timestamp } = body;
 
     // TODO - need to add in some validation?
     // Validate the body (example: check if required fields are present)
@@ -37,19 +58,23 @@ export async function POST(request: NextRequest) {
     //   );
     // }
 
-    const location = await getLocationInfo(body.ipAddress);
+    const { location } = await getLocationInfo(body.ipAddress);
 
     const addedVisitor = await addVisitor({
       app_name: appName,
-      ip_address: ipAddress,
-      browser_os: `${browser}/${os}`,
-      referrer,
+      city: city ?? "unknown",
+      country: country ?? "unknown",
+      ip_address: ip ?? "unknown",
+      browser_os: `${browser?.name ?? "unknown"}/${os?.name ?? "unknown"}`,
+      browser: browser?.name ?? "unknown",
+      os: os?.name ?? "unknown",
+      referrer: referrer ?? "unknown",
       timestamp: new Date(timestamp),
       page,
       location,
     });
 
-    console.log("addedVisitor response:", addedVisitor);
+    // console.log("addedVisitor response:", addedVisitor);
 
     return NextResponse.json({ message: "POST request received" });
   } catch (error) {
