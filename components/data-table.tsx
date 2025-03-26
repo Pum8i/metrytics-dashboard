@@ -18,6 +18,7 @@ export default function DataTable({ visitors }: DataTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="">App Name</TableHead>
             <TableHead className="">Time</TableHead>
             <TableHead>IP Address</TableHead>
             <TableHead>Location</TableHead>
@@ -29,6 +30,7 @@ export default function DataTable({ visitors }: DataTableProps) {
         <TableBody>
           {visitors.map((visitor) => (
             <TableRow key={visitor.id}>
+              <TableCell className="font-medium">{visitor.app_name}</TableCell>
               <TableCell className="font-medium">
                 {new Date(visitor.timestamp).toLocaleString()}
               </TableCell>

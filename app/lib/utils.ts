@@ -2,10 +2,11 @@
  * Get the location information from the IP address.
  * Uses an external API - see https://ip-api.com/ for details.
  *
- * @param {string} ipAddress - The IP address to get location information for.
- * @returns {Promise<string>} - A promise that resolves to a string containing the city and country.
  */
-export async function getLocationInfo(ipAddress: string): Promise<string> {
+export async function getLocationInfo(
+  ipAddress: string
+): Promise<{ location: string; city: string; country: string }> {
+  const unknown = { location: "unknown", city: "unknown", country: "unknown" };
   try {
     const resp = await fetch(
       `http://ip-api.com/json/${ipAddress}?fields=status,message,country,countryCode,regionName,city`,
@@ -16,18 +17,22 @@ export async function getLocationInfo(ipAddress: string): Promise<string> {
       }
     );
     if (!resp.ok) {
-      return "unknown";
+      return unknown;
     }
     const respData = await resp.json();
 
     if (respData.status !== "success") {
-      return "unknown";
+      return unknown;
     }
 
-    return `${respData.city}/${respData.country}`;
+    return {
+      location: `${respData.city}/${respData.country}`,
+      city: respData.city,
+      country: respData.country,
+    };
   } catch (error) {
     console.log("getLocationInfo ~ error:", error);
-    return "unknown";
+    return unknown;
   }
 }
 
