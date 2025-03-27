@@ -14,6 +14,30 @@ export async function GET() {
   return NextResponse.json(visitors);
 }
 
+/**
+ * Handles POST requests for analytics data collection.
+ *
+ * @param request - The incoming NextRequest object containing analytics data
+ *
+ * @remarks
+ * This endpoint processes visitor analytics data, collecting information such as:
+ * - Browser and OS details
+ * - IP address and location (city/country)
+ * - Referrer information
+ * - Page visited
+ * - Application name
+ * - Timestamp
+ *
+ * You can pass the data in via a POST Body (good for if you're api call is coming from a Server) or let this end point try to figure it out.
+ *
+ * If REQUIRE_API_KEY is set to "true", the endpoint requires valid API key authentication
+ * via the x-api-key header.
+ *
+ * @throws Will return a 401 status if API key authentication fails
+ * @throws Will return a 500 status if internal server error occurs
+ *
+ * @returns NextResponse with status 200 and success message if analytics data is processed successfully
+ */
 export async function POST(request: NextRequest) {
   try {
     const requestHeaders = new Headers(request.headers);
