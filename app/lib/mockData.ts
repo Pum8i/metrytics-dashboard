@@ -44,10 +44,8 @@ export const generateMockVisitors = (
       timestamp: new Date(
         Date.now() - Math.floor(Math.random() * 7 * 24 * 60 * 60 * 1000)
       ),
-      location: `${city}/${country}`,
       city: city,
       country: country,
-      browser_os: `${browser}/${operatingSystem}`,
       browser: browser,
       os: operatingSystem,
       page,
