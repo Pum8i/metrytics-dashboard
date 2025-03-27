@@ -12,10 +12,8 @@ export async function GET() {
   //   {
   //     app_name: "app1",
   //     ip_address: "192.168.1.1",
-  //     location: "New York/US",
   //     city: "New York",
   //     country: "US",
-  //     browser_os: "Chrome/Windows",
   //     browser: "Chrome",
   //     os: "Windows",
   //     page: "/home",
@@ -25,10 +23,8 @@ export async function GET() {
   //   {
   //     app_name: "app1",
   //     ip_address: "10.0.0.1",
-  //     location: "London/UK",
   //     city: "London",
   //     country: "UK",
-  //     browser_os: "Safari/macOS",
   //     browser: "Safari",
   //     os: "macOS",
   //     page: "/products",
@@ -38,10 +34,8 @@ export async function GET() {
   //   {
   //     app_name: "app2",
   //     ip_address: "172.16.0.1",
-  //     location: "Berlin/DE",
   //     city: "Berlin",
   //     country: "DE",
-  //     browser_os: "Firefox/Linux",
   //     browser: "Firefox",
   //     os: "Linux",
   //     page: "/about",

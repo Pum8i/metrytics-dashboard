@@ -27,10 +27,14 @@ export default function ClientCard({ visitor }: ClientCardProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {visitor.location && (
-            <ClientCardItem label={"Location"} value={`${visitor.location}`} />
-          )}
-          <ClientCardItem label={"Device"} value={visitor.browser_os} />
+          <ClientCardItem
+            label={"Location"}
+            value={`${visitor.city}/${visitor.country}`}
+          />
+          <ClientCardItem
+            label={"Device"}
+            value={`${visitor.browser}/${visitor.os}`}
+          />
           <ClientCardItem label={"Page"} value={visitor.page} />
           <ClientCardItem label={"Referrer"} value={visitor.referrer} />
         </div>

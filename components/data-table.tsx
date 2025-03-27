@@ -21,8 +21,10 @@ export default function DataTable({ visitors }: DataTableProps) {
             <TableHead className="">App Name</TableHead>
             <TableHead className="">Time</TableHead>
             <TableHead>IP Address</TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead className="">Browser / OS</TableHead>
+            <TableHead>City</TableHead>
+            <TableHead>Country</TableHead>
+            <TableHead className="">Browser</TableHead>
+            <TableHead className="">OS</TableHead>
             <TableHead className="">Page</TableHead>
             <TableHead className="">Referrer</TableHead>
           </TableRow>
@@ -37,12 +39,10 @@ export default function DataTable({ visitors }: DataTableProps) {
               <TableCell className="font-medium">
                 {visitor.ip_address}
               </TableCell>
-              <TableCell className="font-medium">
-                {visitor.location ? `${visitor.location}` : "Unknown"}
-              </TableCell>
-              <TableCell className="font-medium">
-                {visitor.browser_os}
-              </TableCell>
+              <TableCell className="font-medium">{visitor.city}</TableCell>
+              <TableCell className="font-medium">{visitor.country}</TableCell>
+              <TableCell className="font-medium">{visitor.browser}</TableCell>
+              <TableCell className="font-medium">{visitor.os}</TableCell>
               <TableCell className="font-medium"> {visitor.page}</TableCell>
               <TableCell className="font-medium"> {visitor.referrer}</TableCell>
             </TableRow>
