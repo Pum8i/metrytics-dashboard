@@ -5,8 +5,8 @@
  */
 export async function getLocationInfo(
   ipAddress: string
-): Promise<{ location: string; city: string; country: string }> {
-  const unknown = { location: "unknown", city: "unknown", country: "unknown" };
+): Promise<{ city: string; country: string }> {
+  const unknown = { city: "unknown", country: "unknown" };
   try {
     const resp = await fetch(
       `http://ip-api.com/json/${ipAddress}?fields=status,message,country,countryCode,regionName,city`,
@@ -26,7 +26,6 @@ export async function getLocationInfo(
     }
 
     return {
-      location: `${respData.city}/${respData.country}`,
       city: respData.city,
       country: respData.country,
     };

@@ -1,8 +1,9 @@
 "use server";
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
-import { getBrowserInfo, getLocationInfo } from "@/app/lib/utils";
+import { getLocationInfo } from "@/app/lib/utils";
 import { ipAddress } from "@vercel/functions";
+import { IVisitorData } from "@/app/types";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
 
@@ -14,40 +15,14 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const requestHeaders = new Headers(request.headers);
-  const { browser, cpu, device, os, engine } = userAgent(request);
-  const userAgent2 = requestHeaders.get("user-agent") ?? "unknown";
-  // const { city, country, flag } = geolocation(request);
-  const ip = ipAddress(request);
-  const ip2 = requestHeaders.get("x-forwarded-for") || "121.0.0.1";
-  const referrer = requestHeaders.get("referrer") || "unknown";
-
-  const city = request.headers.get("x-vercel-ip-city") || "unknown";
-  const country = request.headers.get("x-vercel-ip-country") || "unknown";
-  const realIp = request.headers.get("x-real-ip") || "unknown";
-  console.log(`***REQUEST`, request);
-
-  requestHeaders.forEach((value, key) => {
-    console.log(`***headers: ${key}: ${value}`);
-  });
-
-  console.log(
-    "User Agent:",
-    userAgent2,
-    ip2,
-    browser,
-    cpu,
-    device,
-    os,
-    engine,
-    city,
-    country,
-    ip,
-    realIp,
-    referrer
-  );
-
   try {
+    const requestHeaders = new Headers(request.headers);
+    const { browser: browserServer, os: osServer } = userAgent(request);
+    const ipServer = ipAddress(request);
+    const referrerServer = requestHeaders.get("referrer") || "unknown";
+    let cityServer = request.headers.get("x-vercel-ip-city") || "unknown";
+    let countryServer = request.headers.get("x-vercel-ip-country") || "unknown";
+
     const apiKey = request.headers.get("x-api-key");
 
     if (
@@ -58,7 +33,17 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { appName, page, timestamp } = body;
+    const {
+      appName,
+      browser,
+      city,
+      country,
+      ip,
+      os,
+      referrer,
+      page,
+      timestamp,
+    } = body;
 
     // TODO - need to add in some validation?
     // Validate the body (example: check if required fields are present)
@@ -69,30 +54,33 @@ export async function POST(request: NextRequest) {
     //   );
     // }
 
-    const { location } = await getLocationInfo(ip ?? "");
-    const { browserName, osName } = getBrowserInfo(
-      requestHeaders.get("userAgent") ?? ""
-    );
+    if (ip) {
+      const { city, country } = await getLocationInfo(ip);
+      cityServer = city;
+      countryServer = country;
+    }
+
+    const browserName = browser ?? browserServer?.name ?? "unknown";
+    const osName = os ?? osServer?.name ?? "unknown";
 
     const visitor = {
       app_name: appName,
-      city: city ?? "unknown",
-      country: country ?? "unknown",
-      ip_address: ip ?? "unknown",
-      browser_os: `${browser?.name ?? "unknown"}/${os?.name ?? "unknown"}`,
-      browser: browser?.name ?? browserName ?? "unknown",
-      os: os?.name ?? osName ?? "unknown",
-      referrer: referrer ?? "unknown",
+      city: city ?? cityServer,
+      country: country ?? countryServer,
+      ip_address: ip ?? ipServer,
+      browser_os: `${browserName}/${osName}`,
+      browser: browserName,
+      os: osName,
+      referrer: referrer ?? referrerServer,
       timestamp: timestamp ? new Date(timestamp) : new Date(),
       page,
-      location,
     };
 
-    console.log("addedVisitor response:", visitor);
+    console.log("Adding Visitor:", visitor);
 
-    const addedVisitor = await addVisitor(visitor);
+    const addedVisitor: IVisitorData = await addVisitor(visitor);
 
-    console.log("addedVisitor response:", addedVisitor);
+    console.log("Visitor Added:", addedVisitor);
 
     return NextResponse.json({ message: "POST request received" });
   } catch (error) {
