@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
   const city = request.headers.get("x-vercel-ip-city") || "unknown";
   const country = request.headers.get("x-vercel-ip-country") || "unknown";
   const realIp = request.headers.get("x-real-ip") || "unknown";
+  console.log(`***REQUEST`, request);
 
   requestHeaders.forEach((value, key) => {
     console.log(`***headers: ${key}: ${value}`);
