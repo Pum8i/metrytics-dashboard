@@ -3,6 +3,7 @@ import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
 import { getBrowserInfo, getLocationInfo } from "@/app/lib/utils";
 import { ipAddress } from "@vercel/functions";
+import { headers } from "next/headers";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
 
@@ -13,11 +14,18 @@ export async function GET() {
   return NextResponse.json(visitors);
 }
 
+const headersList = await headers();
+headersList.forEach((value, key) => {
+  console.log("****headers:", key, value);
+});
+
 export async function POST(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   const { browser, cpu, device, os, engine } = userAgent(request);
+  const userAgent2 = requestHeaders.get("user-agent") ?? "unknown";
   // const { city, country, flag } = geolocation(request);
   const ip = ipAddress(request);
+  const ip2 = requestHeaders.get("x-forwarded-for") || "121.0.0.1";
   const referrer = requestHeaders.get("referrer") || "unknown";
 
   const city = request.headers.get("x-vercel-ip-city") || "unknown";
@@ -26,6 +34,8 @@ export async function POST(request: NextRequest) {
 
   console.log(
     "User Agent:",
+    userAgent2,
+    ip2,
     browser,
     cpu,
     device,
