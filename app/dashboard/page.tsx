@@ -26,7 +26,7 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const visitorsRes = await fetch("/api/analytics");
+      const visitorsRes = await fetch("/api/analytics/visitor");
 
       if (!visitorsRes.ok) {
         throw new Error("Failed to fetch data");

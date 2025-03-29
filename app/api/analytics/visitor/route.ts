@@ -8,7 +8,6 @@ import { IVisitorData } from "@/app/types";
 // import { generateMockVisitors } from "@/app/lib/mockData";
 
 export async function GET() {
-  // TODO Update mock to include new fields
   // const visitors = generateMockVisitors(10);
   const visitors = await getVisitors();
   return NextResponse.json(visitors);
@@ -44,6 +43,8 @@ export async function POST(request: NextRequest) {
     const { browser: browserServer, os: osServer } = userAgent(request);
     const ipServer = ipAddress(request);
     const referrerServer = requestHeaders.get("referrer") || "unknown";
+
+    // https://vercel.com/docs/headers/request-headers
     let cityServer = request.headers.get("x-vercel-ip-city") || "unknown";
     let countryServer = request.headers.get("x-vercel-ip-country") || "unknown";
 
@@ -64,20 +65,20 @@ export async function POST(request: NextRequest) {
       country,
       ip,
       os,
-      referrer,
       page,
+      referrer,
       timestamp,
     } = body;
 
-    // TODO - need to add in some validation?
-    // Validate the body (example: check if required fields are present)
-    // if (!body.ipAddress || !body.page) {
-    //   return NextResponse.json(
-    //     { error: "Missing required fields" },
-    //     { status: 400 }
-    //   );
-    // }
+    // Validate the body
+    if (!body.appName || !body.page) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
+    // If we're passing in the ip address as part of the body, we're assuming that we're
     if (ip) {
       const { city, country } = await getLocationInfo(ip);
       cityServer = city;
@@ -89,15 +90,14 @@ export async function POST(request: NextRequest) {
 
     const visitor = {
       app_name: appName,
+      page,
       city: city ?? cityServer,
       country: country ?? countryServer,
-      ip_address: ip ?? ipServer,
-      browser_os: `${browserName}/${osName}`,
+      ip_address: ip ?? ipServer ?? "unknown",
       browser: browserName,
       os: osName,
       referrer: referrer ?? referrerServer,
       timestamp: timestamp ? new Date(timestamp) : new Date(),
-      page,
     };
 
     console.log("Adding Visitor:", visitor);
