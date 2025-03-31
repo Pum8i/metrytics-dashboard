@@ -14,6 +14,14 @@ export interface IVisitorData {
 export interface IAnalyticsSummary {
   totalVisits: number;
   uniqueVisitors: number;
-  topPages: Array<{ page: string; visits: number }>;
-  topReferrers: Array<{ referrer: string; visits: number }>;
+  topPages: IKeyVisits[];
+  topReferrers: IKeyVisits[];
+  countries: IKeyVisits[];
+  cities: IKeyVisits[];
+}
+
+export interface IKeyVisits {
+  key: string;
+  visits: number;
+  percent: number;
 }

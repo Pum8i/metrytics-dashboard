@@ -3,17 +3,42 @@ import { neon } from "@neondatabase/serverless";
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-http";
-import { IVisitorData } from "../types";
+import { IKeyVisits, IVisitorData } from "../types";
 
 const client = neon(`${process.env.POSTGRES_URL!}`);
 export const db = drizzle(client);
+
+function countAndSort(
+  items: IVisitorData[],
+  keyExtractor: (item: IVisitorData) => string,
+  totalVisitors: number
+): IKeyVisits[] {
+  const counts = items.reduce((map, item) => {
+    const key = keyExtractor(item);
+    map.set(key, (map.get(key) || 0) + 1);
+    return map;
+  }, new Map<string, number>());
+
+  return Array.from(counts)
+    .map(([key, visits]) => {
+      const percent = (visits / totalVisitors) * 100;
+      return {
+        key,
+        visits,
+        percent: parseFloat(percent.toFixed(1)),
+      };
+    })
+    .sort((a, b) => b.visits - a.visits);
+}
 
 export async function getVisitors(): Promise<{
   visitors: IVisitorData[];
   totalVisitors: number;
   uniqueVisitors: number;
-  pages: { page: string; visits: number }[];
-  referrers: { referrer: string; visits: number }[];
+  pages: IKeyVisits[];
+  referrers: IKeyVisits[];
+  cities: IKeyVisits[];
+  countries: IKeyVisits[];
 }> {
   const allVisitors = await db
     .select()
@@ -24,26 +49,22 @@ export async function getVisitors(): Promise<{
 
   const uniqueVisitors = new Set(allVisitors.map((v) => v.ip_address)).size;
 
-  const referrers = Array.from(
-    allVisitors.reduce((map, visitor) => {
-      map.set(visitor.referrer, (map.get(visitor.referrer) || 0) + 1);
-      return map;
-    }, new Map<string, number>())
-  ).map(([referrer, visits]) => ({ referrer, visits }));
+  const referrers = countAndSort(allVisitors, (v) => v.referrer, totalVisitors);
 
-  const pages = Array.from(
-    allVisitors.reduce((map, visitor) => {
-      map.set(visitor.page, (map.get(visitor.page) || 0) + 1);
-      return map;
-    }, new Map<string, number>())
-  ).map(([page, visits]) => ({ page, visits }));
+  const pages = countAndSort(allVisitors, (v) => v.page, totalVisitors);
+
+  const countries = countAndSort(allVisitors, (v) => v.country, totalVisitors);
+
+  const cities = countAndSort(allVisitors, (v) => v.city, totalVisitors);
 
   return {
-    visitors: allVisitors,
-    totalVisitors,
-    uniqueVisitors,
+    cities,
+    countries,
     pages,
     referrers,
+    totalVisitors,
+    uniqueVisitors,
+    visitors: allVisitors,
   };
 }
 
