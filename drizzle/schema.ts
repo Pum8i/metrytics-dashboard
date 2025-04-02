@@ -29,3 +29,15 @@ export const user = pgTable("user", {
   email: varchar({ length: 64 }),
   password: varchar({ length: 64 }),
 });
+
+export const events = pgTable("events", {
+  id: uuid()
+    .default(sql`uuid_generate_v4()`)
+    .primaryKey()
+    .notNull(),
+  app_name: text("app_name").notNull(),
+  ip_address: text("ip_address").notNull(),
+  event: text("event").notNull(),
+  description: text("description"),
+  timestamp: timestamp("timestamp").notNull(),
+});

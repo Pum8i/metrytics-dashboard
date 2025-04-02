@@ -1,4 +1,3 @@
-"use server";
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
 import { getLocationInfo } from "@/app/lib/utils";
@@ -6,6 +5,7 @@ import { ipAddress } from "@vercel/functions";
 import { IVisitorData } from "@/app/types";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
+export const runtime = "edge";
 
 export async function GET() {
   // const visitors = generateMockVisitors(10);
@@ -27,10 +27,8 @@ export async function GET() {
  * - Application name
  * - Timestamp
  *
- * You can pass the data in via a POST Body (good for if you're api call is coming from a Server) or let this end point try to figure it out.
+ * You can pass the data in via a POST Body (good for if you're api call is coming from a Server) or let the server try to figure it out.
  *
- * If REQUIRE_API_KEY is set to "true", the endpoint requires valid API key authentication
- * via the x-api-key header.
  *
  * @throws Will return a 401 status if API key authentication fails
  * @throws Will return a 500 status if internal server error occurs
@@ -48,15 +46,6 @@ export async function POST(request: NextRequest) {
     let cityServer = request.headers.get("x-vercel-ip-city") || "unknown";
     let countryServer = request.headers.get("x-vercel-ip-country") || "unknown";
 
-    const apiKey = request.headers.get("x-api-key");
-
-    if (
-      process.env.REQUIRE_API_KEY === "true" &&
-      apiKey !== process.env.API_KEY
-    ) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body = await request.json();
     const {
       appName,
@@ -71,10 +60,10 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Validate the body
-    if (!body.appName || !body.page) {
+    if (!appName || !page) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
@@ -106,7 +95,13 @@ export async function POST(request: NextRequest) {
 
     console.log("Visitor Added:", addedVisitor);
 
-    return NextResponse.json({ message: "POST request received" });
+    return NextResponse.json(
+      {
+        message: "POST - Visit added",
+        id: addedVisitor.id,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Error handling POST request:", error);
     return NextResponse.json(

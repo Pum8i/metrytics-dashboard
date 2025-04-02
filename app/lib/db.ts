@@ -1,9 +1,9 @@
-import { user, visitors } from "@/drizzle/schema";
+import { events, user, visitors } from "@/drizzle/schema";
 import { neon } from "@neondatabase/serverless";
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-http";
-import { IKeyVisits, IVisitorData } from "../types";
+import { IEventData, IKeyVisits, IVisitorData } from "../types";
 
 const client = neon(`${process.env.POSTGRES_URL!}`);
 export const db = drizzle(client);
@@ -89,4 +89,20 @@ export async function createUser(email: string, password: string) {
   const hash = hashSync(password, salt);
 
   return await db.insert(user).values({ email, password: hash }).returning();
+}
+
+export async function getEvents(): Promise<IEventData[]> {
+  const allEvents = await db
+    .select()
+    .from(events)
+    .orderBy(desc(events.timestamp));
+  return allEvents;
+}
+
+export async function addEvent(event: IEventData) {
+  const insertedEvent: IEventData[] = await db
+    .insert(events)
+    .values([event])
+    .returning();
+  return insertedEvent[0];
 }
