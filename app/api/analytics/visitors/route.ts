@@ -1,4 +1,3 @@
-// "use server";
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
 import { getLocationInfo } from "@/app/lib/utils";
@@ -47,15 +46,6 @@ export async function POST(request: NextRequest) {
     let cityServer = request.headers.get("x-vercel-ip-city") || "unknown";
     let countryServer = request.headers.get("x-vercel-ip-country") || "unknown";
 
-    const apiKey = request.headers.get("x-api-key");
-
-    if (
-      process.env.REQUIRE_API_KEY === "true" &&
-      apiKey !== process.env.API_KEY
-    ) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body = await request.json();
     const {
       appName,
@@ -70,10 +60,10 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Validate the body
-    if (!body.appName || !body.page) {
+    if (!appName || !page) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
@@ -105,7 +95,13 @@ export async function POST(request: NextRequest) {
 
     console.log("Visitor Added:", addedVisitor);
 
-    return NextResponse.json({ message: "POST request received" });
+    return NextResponse.json(
+      {
+        message: "POST - Visit added",
+        id: addedVisitor.id,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Error handling POST request:", error);
     return NextResponse.json(

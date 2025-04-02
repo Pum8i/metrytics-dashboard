@@ -1,4 +1,3 @@
-// "use server";
 import { addEvent, getEvents } from "@/app/lib/db";
 import { IEventData } from "@/app/types";
 import { ipAddress } from "@vercel/functions";
@@ -8,8 +7,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-export async function GET() {
-  // const visitors = generateMockEvents(10);
+export async function GET(request: NextRequest) {
+  // const events = generateMockEvents(10);
   const events = await getEvents();
   return NextResponse.json(events);
 }
@@ -40,25 +39,16 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = request.headers.get("x-api-key");
-
-    if (
-      process.env.REQUIRE_API_KEY === "true" &&
-      apiKey !== process.env.API_KEY
-    ) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const ipServer = ipAddress(request);
 
     const body = await request.json();
-    const { appName, id, eventName, eventDescription, ip, timestamp } = body;
+    const { appName, eventName, id, eventDescription, ip, timestamp } = body;
 
     // Validate the body
-    if (!body.appName || !eventName) {
+    if (!appName || !eventName) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
@@ -71,15 +61,15 @@ export async function POST(request: NextRequest) {
       timestamp: timestamp ? new Date(timestamp) : new Date(),
     };
 
-    console.log("Adding Visitor:", eventData);
+    console.log("Adding Event:", eventData);
 
     const addedEvent: IEventData = await addEvent(eventData);
 
-    console.log("Visitor Added:", addedEvent);
+    console.log("Event Added:", addedEvent);
 
     return NextResponse.json(
       {
-        message: "POST request received",
+        message: "POST - Event added",
         id: addedEvent.id,
       },
       { status: 201 }

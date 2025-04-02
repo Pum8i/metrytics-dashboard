@@ -62,11 +62,11 @@ Uncomment return statement in `app/api/seed/route.ts` and then goto [http://loca
 
 7. Use Mock Data (optional)
 
-Uncomment `generateMockVisitors(10)` in `app/api/analytics`
+Uncomment `generateMockVisitors(10)` in `app/api/analytics/visitors`
 
 8. Telemetry can be added to the database by making a POST call to http://localhost:3000/api/analytics
 
-n.b. Data can be sent by making a simple POST call from your app you want to track, to your server. There is also a npm package that can be used to make things _slightly_ easier
+n.b. Data can be sent by making a simple POST call from your app you want to track, to your server. There is also the [Metrytics Web Client](https://www.npmjs.com/package/metrytics-client) package that can be used to make things _slightly_ easier
 
 ## Learn More
 
