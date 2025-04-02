@@ -1,10 +1,10 @@
-"use server";
+// "use server";
 import { addEvent, getEvents } from "@/app/lib/db";
 import { IEventData } from "@/app/types";
 import { ipAddress } from "@vercel/functions";
 import { NextRequest, NextResponse } from "next/server";
 
-// import { generateMockEventss } from "@/app/lib/mockData";
+// import { generateMockEvents } from "@/app/lib/mockData";
 
 export const runtime = "edge";
 

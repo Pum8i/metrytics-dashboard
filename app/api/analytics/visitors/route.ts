@@ -1,4 +1,4 @@
-"use server";
+// "use server";
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { addVisitor, getVisitors } from "@/app/lib/db";
 import { getLocationInfo } from "@/app/lib/utils";
