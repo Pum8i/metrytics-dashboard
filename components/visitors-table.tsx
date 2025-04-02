@@ -12,7 +12,7 @@ interface DataTableProps {
   visitors: IVisitorData[];
 }
 
-export default function DataTable({ visitors }: DataTableProps) {
+export default function VisitorsTable({ visitors }: DataTableProps) {
   return (
     <div className="overflow-x-auto">
       <Table>

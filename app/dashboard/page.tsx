@@ -1,17 +1,20 @@
 "use client";
 
-import { IAnalyticsSummary, IVisitorData } from "@/app/types";
+import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
 import ClientCard from "@/components/client-card";
-import DataTable from "@/components/data-table";
+import EventsTable from "@/components/events-table";
 import NavBar from "@/components/nav";
 import Summary from "@/components/sections/summary";
+import Tops from "@/components/sections/tops";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import VisitorsTable from "@/components/visitors-table";
 import { useActionState, useEffect, useState } from "react";
 import { logout } from "../lib/actions";
-import Tops from "@/components/sections/tops";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
+  const [events, setEvents] = useState<IEventData[]>([]);
+
   const [summary, setSummary] = useState<IAnalyticsSummary | null>(null);
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
@@ -20,11 +23,19 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const visitorsRes = await fetch("/api/analytics/visitors");
+      const [visitorsRes, eventsRes] = await Promise.all([
+        fetch("/api/analytics/visitors"),
+        fetch("/api/analytics/events"),
+      ]);
 
-      if (!visitorsRes.ok) {
+      if (!visitorsRes.ok || !eventsRes.ok) {
         throw new Error("Failed to fetch data");
       }
+
+      const [visitorsData, eventsData] = await Promise.all([
+        visitorsRes.json(),
+        eventsRes.json(),
+      ]);
 
       const {
         visitors,
@@ -34,13 +45,18 @@ export default function Dashboard() {
         referrers,
         countries,
         cities,
-      } = await visitorsRes.json();
+      } = visitorsData;
+
+      const { allEvents, totalEvents } = eventsData;
 
       setVisitors(visitors);
+      setEvents(allEvents);
+
       setSummary({
         countries,
         cities,
-        totalVisits: totalVisitors,
+        totalEvents,
+        totalVisitors,
         topReferrers: referrers,
         topPages: pages,
         uniqueVisitors,
@@ -83,7 +99,7 @@ export default function Dashboard() {
       />
       <div className="container mx-auto px-4 pt-24 relative">
         {loading && (
-          <div className="flex h-screen z-50 items-center justify-center absolute inset-0 bg-background/50">
+          <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
             <div className="text-2xl font-semibold">Refreshing data...</div>
           </div>
         )}
@@ -112,9 +128,23 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               {visitors.length > 0 ? (
-                <DataTable visitors={visitors.slice(0, 10)} />
+                <VisitorsTable visitors={visitors.slice(0, 10)} />
               ) : (
                 <p>No visitor data available</p>
+              )}
+            </CardContent>
+          </Card>
+        </Section>
+        <Section>
+          <Card className="p-6">
+            <CardHeader>
+              <CardTitle>Recent Events</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {events.length > 0 ? (
+                <EventsTable events={events.slice(0, 10)} />
+              ) : (
+                <p>No event data available</p>
               )}
             </CardContent>
           </Card>
