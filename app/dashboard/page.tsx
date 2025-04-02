@@ -9,10 +9,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useActionState, useEffect, useState } from "react";
 import { logout } from "../lib/actions";
 import Tops from "@/components/sections/tops";
+import EventsTable from "@/components/events-table";
+import VisitorsTable from "@/components/visitors-table";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
-  const [, setEvents] = useState<IEventData[]>([]);
+  const [events, setEvents] = useState<IEventData[]>([]);
 
   const [summary, setSummary] = useState<IAnalyticsSummary | null>(null);
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
@@ -127,9 +129,23 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               {visitors.length > 0 ? (
-                <DataTable visitors={visitors.slice(0, 10)} />
+                <VisitorsTable visitors={visitors.slice(0, 10)} />
               ) : (
                 <p>No visitor data available</p>
+              )}
+            </CardContent>
+          </Card>
+        </Section>
+        <Section>
+          <Card className="p-6">
+            <CardHeader>
+              <CardTitle>Recent Events</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {events.length > 0 ? (
+                <EventsTable events={events.slice(0, 10)} />
+              ) : (
+                <p>No event data available</p>
               )}
             </CardContent>
           </Card>
