@@ -25,3 +25,12 @@ export interface IKeyVisits {
   visits: number;
   percent: number;
 }
+
+export interface IEventData {
+  id: string;
+  app_name: string;
+  ip_address: string;
+  timestamp: Date;
+  event: string;
+  description: string | null | undefined;
+}

@@ -6,6 +6,7 @@ import { ipAddress } from "@vercel/functions";
 import { IVisitorData } from "@/app/types";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
+export const runtime = "edge";
 
 export async function GET() {
   // const visitors = generateMockVisitors(10);
@@ -27,10 +28,8 @@ export async function GET() {
  * - Application name
  * - Timestamp
  *
- * You can pass the data in via a POST Body (good for if you're api call is coming from a Server) or let this end point try to figure it out.
+ * You can pass the data in via a POST Body (good for if you're api call is coming from a Server) or let the server try to figure it out.
  *
- * If REQUIRE_API_KEY is set to "true", the endpoint requires valid API key authentication
- * via the x-api-key header.
  *
  * @throws Will return a 401 status if API key authentication fails
  * @throws Will return a 500 status if internal server error occurs
