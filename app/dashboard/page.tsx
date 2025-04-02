@@ -2,15 +2,14 @@
 
 import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
 import ClientCard from "@/components/client-card";
-import DataTable from "@/components/visitors-table";
+import EventsTable from "@/components/events-table";
 import NavBar from "@/components/nav";
 import Summary from "@/components/sections/summary";
+import Tops from "@/components/sections/tops";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import VisitorsTable from "@/components/visitors-table";
 import { useActionState, useEffect, useState } from "react";
 import { logout } from "../lib/actions";
-import Tops from "@/components/sections/tops";
-import EventsTable from "@/components/events-table";
-import VisitorsTable from "@/components/visitors-table";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
