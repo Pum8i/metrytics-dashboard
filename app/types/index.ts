@@ -12,8 +12,9 @@ export interface IVisitorData {
 }
 
 export interface IAnalyticsSummary {
-  totalVisits: number;
+  totalVisitors: number;
   uniqueVisitors: number;
+  totalEvents: number;
   topPages: IKeyVisits[];
   topReferrers: IKeyVisits[];
   countries: IKeyVisits[];

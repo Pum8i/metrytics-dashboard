@@ -91,12 +91,15 @@ export async function createUser(email: string, password: string) {
   return await db.insert(user).values({ email, password: hash }).returning();
 }
 
-export async function getEvents(): Promise<IEventData[]> {
+export async function getEvents(): Promise<{
+  allEvents: IEventData[];
+  totalEvents: number;
+}> {
   const allEvents = await db
     .select()
     .from(events)
     .orderBy(desc(events.timestamp));
-  return allEvents;
+  return { allEvents, totalEvents: allEvents.length };
 }
 
 export async function addEvent(event: IEventData) {
