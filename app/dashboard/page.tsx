@@ -2,7 +2,7 @@
 
 import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
 import ClientCard from "@/components/client-card";
-import DataTable from "@/components/data-table";
+import DataTable from "@/components/visitors-table";
 import NavBar from "@/components/nav";
 import Summary from "@/components/sections/summary";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import Tops from "@/components/sections/tops";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
-  const [events, setEvents] = useState<IEventData[]>([]);
+  const [, setEvents] = useState<IEventData[]>([]);
 
   const [summary, setSummary] = useState<IAnalyticsSummary | null>(null);
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
