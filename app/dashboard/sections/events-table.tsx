@@ -13,6 +13,7 @@ interface DataTableProps {
 }
 
 export default function EventsTable({ events }: DataTableProps) {
+  if (events.length === 0) return <p>No events data available</p>;
   return (
     <div className="overflow-x-auto">
       <Table>

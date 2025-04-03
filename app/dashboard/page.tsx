@@ -1,15 +1,10 @@
 "use client";
 
+import NavBar from "@/app/dashboard/nav";
 import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
-import ClientCard from "@/components/client-card";
-import EventsTable from "@/components/events-table";
-import NavBar from "@/components/nav";
-import Summary from "@/components/sections/summary";
-import Tops from "@/components/sections/tops";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import VisitorsTable from "@/components/visitors-table";
 import { useActionState, useEffect, useState } from "react";
 import { logout } from "../lib/actions";
+import FullDashboard from "./full-dashboard";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
@@ -39,7 +34,7 @@ export default function Dashboard() {
 
       const {
         visitors,
-        totalVisitors,
+        pageViews,
         uniqueVisitors,
         pages,
         referrers,
@@ -56,7 +51,7 @@ export default function Dashboard() {
         countries,
         cities,
         totalEvents,
-        totalVisitors,
+        pageViews,
         topReferrers: referrers,
         topPages: pages,
         uniqueVisitors,
@@ -90,72 +85,35 @@ export default function Dashboard() {
   };
 
   return (
-    <main>
+    <main className="max-sm:min-h-screen md:h-screen">
       <NavBar
         formAction={formAction}
         isPending={isPending}
         fetchData={fetchData}
         loading={loading}
       />
-      <div className="container mx-auto px-4 pt-24 relative">
+      <div className="container mx-auto px-2 pt-16 md:pt-18 lg:pt-20 h-full relative">
         {loading && (
           <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
             <div className="text-2xl font-semibold">Refreshing data...</div>
           </div>
         )}
         {summary && (
-          <Section>
-            <Summary summary={summary} />
-          </Section>
+          // <Section>
+          <FullDashboard
+            visitors={visitors}
+            events={events}
+            summary={summary}
+          />
+          // </Section>
         )}
-
-        <Section>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {summary && (
-              <>
-                <Tops title="Top Pages" tops={summary.topPages} />
-                <Tops title="Top Referrers" tops={summary.topReferrers} />
-                <Tops title="Top Countries" tops={summary.countries} />
-                <Tops title="Top Cities" tops={summary.cities} />
-              </>
-            )}
-          </div>
-        </Section>
-        <Section>
-          <Card className="p-6">
-            <CardHeader>
-              <CardTitle>Recent Visitors</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {visitors.length > 0 ? (
-                <VisitorsTable visitors={visitors.slice(0, 10)} />
-              ) : (
-                <p>No visitor data available</p>
-              )}
-            </CardContent>
-          </Card>
-        </Section>
-        <Section>
-          <Card className="p-6">
-            <CardHeader>
-              <CardTitle>Recent Events</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {events.length > 0 ? (
-                <EventsTable events={events.slice(0, 10)} />
-              ) : (
-                <p>No event data available</p>
-              )}
-            </CardContent>
-          </Card>
-        </Section>
-        <Section>
+        {/* <Section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {visitors.slice(0, 6).map((visitor) => (
               <ClientCard key={visitor.id} visitor={visitor} />
             ))}
           </div>
-        </Section>
+        </Section> */}
       </div>
     </main>
   );
