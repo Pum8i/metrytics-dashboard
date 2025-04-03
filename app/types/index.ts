@@ -12,7 +12,7 @@ export interface IVisitorData {
 }
 
 export interface IAnalyticsSummary {
-  totalVisitors: number;
+  pageViews: number;
   uniqueVisitors: number;
   totalEvents: number;
   topPages: IKeyVisits[];
