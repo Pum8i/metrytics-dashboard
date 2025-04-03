@@ -7,7 +7,12 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { useEffect, useRef, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
 
 export default function Tops({
   title,
@@ -17,13 +22,13 @@ export default function Tops({
   tops: IKeyVisits[];
 }) {
   return (
-    <Card className="">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex justify-between">
           <div>{title}</div>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="text-sm">
         <ul className="space-y-4">
           {tops.map((top, index) => (
             <li key={index} className="flex flex-col gap-2">

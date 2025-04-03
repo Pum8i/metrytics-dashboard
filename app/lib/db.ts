@@ -33,7 +33,7 @@ function countAndSort(
 
 export async function getVisitors(): Promise<{
   visitors: IVisitorData[];
-  totalVisitors: number;
+  pageViews: number;
   uniqueVisitors: number;
   pages: IKeyVisits[];
   referrers: IKeyVisits[];
@@ -45,24 +45,24 @@ export async function getVisitors(): Promise<{
     .from(visitors)
     .orderBy(desc(visitors.timestamp));
 
-  const totalVisitors = allVisitors.length;
+  const pageViews = allVisitors.length;
 
   const uniqueVisitors = new Set(allVisitors.map((v) => v.ip_address)).size;
 
-  const referrers = countAndSort(allVisitors, (v) => v.referrer, totalVisitors);
+  const referrers = countAndSort(allVisitors, (v) => v.referrer, pageViews);
 
-  const pages = countAndSort(allVisitors, (v) => v.page, totalVisitors);
+  const pages = countAndSort(allVisitors, (v) => v.page, pageViews);
 
-  const countries = countAndSort(allVisitors, (v) => v.country, totalVisitors);
+  const countries = countAndSort(allVisitors, (v) => v.country, pageViews);
 
-  const cities = countAndSort(allVisitors, (v) => v.city, totalVisitors);
+  const cities = countAndSort(allVisitors, (v) => v.city, pageViews);
 
   return {
     cities,
     countries,
     pages,
     referrers,
-    totalVisitors,
+    pageViews,
     uniqueVisitors,
     visitors: allVisitors,
   };

@@ -22,9 +22,11 @@ export default function NavBar({
   isPending,
 }: NavBarProps) {
   return (
-    <nav className="fixed w-full backdrop-blur-3xl z-50 h-16 sm:px-4 px-2">
+    <nav className="fixed w-full backdrop-blur-3xl z-50 h-16  px-2 sm:px-4">
       <div className="m-auto py-3 flex items-end justify-between gap-4">
-        <h1 className="text-3xl font-bold grow">Analytics Dashboard</h1>
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold grow">
+          Metrytics Dashboard
+        </h1>
 
         <TooltipProvider>
           <Tooltip>

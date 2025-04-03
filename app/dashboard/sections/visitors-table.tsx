@@ -13,6 +13,7 @@ interface DataTableProps {
 }
 
 export default function VisitorsTable({ visitors }: DataTableProps) {
+  if (visitors.length === 0) return <p>No visitor data available</p>;
   return (
     <div className="overflow-x-auto">
       <Table>
