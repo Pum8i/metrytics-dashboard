@@ -76,13 +76,13 @@ export default function Dashboard() {
     );
   }
 
-  const Section = ({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) => {
-    return <section className="mb-4">{children}</section>;
-  };
+  // const Section = ({
+  //   children,
+  // }: Readonly<{
+  //   children: React.ReactNode;
+  // }>) => {
+  //   return <section className="mb-4">{children}</section>;
+  // };
 
   return (
     <main className="max-sm:min-h-screen md:h-screen">
