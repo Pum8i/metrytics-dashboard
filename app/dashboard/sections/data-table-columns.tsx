@@ -2,31 +2,25 @@
 
 import { IEventData, IVisitorData } from "@/app/types";
 import { Button } from "@/components/ui/button";
-import { ColumnDef, Row } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
+import { Column, ColumnDef, Row } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { ReactNode } from "react";
 
-interface SortableColumnProps {
-  column: {
-    toggleSorting: (ascending: boolean) => void;
-    getIsSorted: () => "asc" | "desc" | false;
-  };
+interface DataTableColumnHeaderProps<TData, TValue>
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>;
   title: string;
 }
 
-const formatTime = ({ row }: { row: Row<any> }) => {
-  const timeDate = new Date(row.getValue("timestamp"));
-  const formattedTime = timeDate.toLocaleString("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return <div className="">{formattedTime}</div>;
-};
+export function DataTableColumnHeader<TData, TValue>({
+  column,
+  title,
+  className,
+}: DataTableColumnHeaderProps<TData, TValue>) {
+  if (!column.getCanSort()) {
+    return <div className={cn(className)}>{title}</div>;
+  }
 
-const sortColumn = ({ column, title }: SortableColumnProps): ReactNode => {
   return (
     <Button
       variant="ghost"
@@ -41,9 +35,24 @@ const sortColumn = ({ column, title }: SortableColumnProps): ReactNode => {
       ) : (
         <ArrowDown className="ml-2 h-4 w-4" />
       )}
-      {}
     </Button>
   );
+}
+
+const formatTime = <T extends IVisitorData | IEventData>({
+  row,
+}: {
+  row: Row<T>;
+}) => {
+  const timeDate = new Date(row.getValue("timestamp"));
+  const formattedTime = timeDate.toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return <div className="">{formattedTime}</div>;
 };
 
 export const visitorsColumns: ColumnDef<IVisitorData>[] = [
@@ -73,7 +82,9 @@ export const visitorsColumns: ColumnDef<IVisitorData>[] = [
   },
   {
     accessorKey: "timestamp",
-    header: ({ column }) => sortColumn({ column, title: "Time" }),
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Time" />
+    ),
     cell: formatTime,
   },
 ];
@@ -97,7 +108,9 @@ export const eventColumns: ColumnDef<IEventData>[] = [
   },
   {
     accessorKey: "timestamp",
-    header: "Time",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Time" />
+    ),
     cell: formatTime,
   },
 ];
