@@ -1,5 +1,3 @@
-import EventsTable from "@/app/dashboard/sections/events-table";
-import VisitorsTable from "@/app/dashboard/sections/visitors-table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Tabs,
@@ -9,7 +7,9 @@ import {
   TabTrigger,
 } from "@/components/ui/tabs";
 import { Activity, Users, View } from "lucide-react";
+import { DataTable } from "../../components/ui/data-table";
 import { IAnalyticsSummary, IEventData, IVisitorData } from "../types";
+import { eventColumns, visitorsColumns } from "./sections/data-table-columns";
 import PageViews from "./sections/page-views";
 
 export default function FullDashboard({
@@ -23,7 +23,7 @@ export default function FullDashboard({
 }) {
   return (
     <Card className="h-full pb-4">
-      <Tabs defaultValue="visitors" className="h-full ">
+      <Tabs defaultValue="visitors" className="h-full">
         <CardHeader>
           <TabsList className="h-full w-full">
             <TabsTrigger value="visitors" className="w-full cursor-pointer">
@@ -52,13 +52,13 @@ export default function FullDashboard({
         </CardHeader>
         <CardContent className="h-full flex-1 overflow-auto">
           <TabsContent value="visitors" className="h-full flex-1">
-            <VisitorsTable visitors={visitors.slice(0, 10)} />
+            <DataTable columns={visitorsColumns} data={visitors} />
           </TabsContent>
           <TabsContent value="page-views" className="h-full flex-1">
             <PageViews summary={summary} />
           </TabsContent>
           <TabsContent value="events" className="h-full flex-1">
-            <EventsTable events={events.slice(0, 10)} />
+            <DataTable columns={eventColumns} data={events} />
           </TabsContent>
         </CardContent>
       </Tabs>
