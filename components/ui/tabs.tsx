@@ -73,17 +73,12 @@ function TabTrigger({
   icon?: React.ElementType;
 }) {
   return (
-    <div className="flex flex-col w-full h-full justify-center ">
-      <div className="flex justify-center items-center gap-4 text-lg ">
+    <div className="flex flex-col w-full h-full justify-center text-sm md:text-md">
+      <div className="flex justify-center items-center gap-2">
         <div>{title}</div>
-        {Icon && (
-          <div className="max-sm:hidden">
-            {<Icon className="max-sm:h-4 max-sm:w-4" />}
-          </div>
-        )}
+        {Icon && <Icon className="max-sm:hidden" />}
       </div>
-
-      <p className="text-lg ">{value}</p>
+      <p className="">{value}</p>
     </div>
   );
 }

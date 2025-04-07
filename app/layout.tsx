@@ -42,7 +42,7 @@ export default function RootLayout({
         <link rel="manifest" href="site.webmanifest" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased bg-gradient-to-b from-secondary to-background dark`}
+        className={`${geistSans.variable} ${geistMono.variable} sm:min-h-screen md:max-h-screen antialiased bg-gradient-to-b from-secondary to-background dark overflow-auto`}
       >
         {children}
       </body>

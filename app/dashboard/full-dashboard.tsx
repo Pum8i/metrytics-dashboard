@@ -22,8 +22,8 @@ export default function FullDashboard({
   summary: IAnalyticsSummary;
 }) {
   return (
-    <Tabs defaultValue="visitors" className="h-full pb-4">
-      <Card className="h-full">
+    <Card className="h-full pb-4">
+      <Tabs defaultValue="visitors" className="h-full ">
         <CardHeader>
           <TabsList className="h-full w-full">
             <TabsTrigger value="visitors" className="w-full cursor-pointer">
@@ -50,18 +50,18 @@ export default function FullDashboard({
             </TabsTrigger>
           </TabsList>
         </CardHeader>
-        <CardContent>
-          <TabsContent value="visitors">
+        <CardContent className="h-full flex-1 overflow-auto">
+          <TabsContent value="visitors" className="h-full flex-1">
             <VisitorsTable visitors={visitors.slice(0, 10)} />
           </TabsContent>
-          <TabsContent value="page-views">
+          <TabsContent value="page-views" className="h-full flex-1">
             <PageViews summary={summary} />
           </TabsContent>
-          <TabsContent value="events">
+          <TabsContent value="events" className="h-full flex-1">
             <EventsTable events={events.slice(0, 10)} />
           </TabsContent>
         </CardContent>
-      </Card>
-    </Tabs>
+      </Tabs>
+    </Card>
   );
 }

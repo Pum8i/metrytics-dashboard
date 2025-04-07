@@ -13,16 +13,19 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../components/ui/card";
+import { cn } from "@/lib/utils";
 
 export default function Tops({
   title,
   tops,
+  className,
 }: {
   title: string;
   tops: IKeyVisits[];
+  className?: string;
 }) {
   return (
-    <Card className="h-full">
+    <Card className={cn("h-full w-full", className)}>
       <CardHeader>
         <CardTitle className="flex justify-between">
           <div>{title}</div>
