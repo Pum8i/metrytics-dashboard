@@ -76,14 +76,6 @@ export default function Dashboard() {
     );
   }
 
-  // const Section = ({
-  //   children,
-  // }: Readonly<{
-  //   children: React.ReactNode;
-  // }>) => {
-  //   return <section className="mb-4">{children}</section>;
-  // };
-
   return (
     <main className="max-sm:min-h-screen md:h-screen md:max-h-screen">
       <NavBar
@@ -92,28 +84,19 @@ export default function Dashboard() {
         fetchData={fetchData}
         loading={loading}
       />
-      <div className="container mx-auto px-2 pb-2 pt-16 h-full relative">
+      <div className="container mx-auto px-2 pb-2 pt-16 h-dvh relative">
         {loading && (
           <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
             <div className="text-2xl font-semibold">Refreshing data...</div>
           </div>
         )}
         {summary && (
-          // <Section>
           <FullDashboard
             visitors={visitors}
             events={events}
             summary={summary}
           />
-          // </Section>
         )}
-        {/* <Section>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {visitors.slice(0, 6).map((visitor) => (
-              <ClientCard key={visitor.id} visitor={visitor} />
-            ))}
-          </div>
-        </Section> */}
       </div>
     </main>
   );
