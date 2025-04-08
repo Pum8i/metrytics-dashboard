@@ -1,6 +1,6 @@
 "use client";
 
-import { authenticate, register } from "@/app/lib/actions";
+import { authenticate, register } from "@/lib/actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,

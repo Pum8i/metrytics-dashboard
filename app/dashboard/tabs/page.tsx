@@ -7,12 +7,12 @@ import {
   TabTrigger,
 } from "@/components/ui/tabs";
 import { Activity, Users, View } from "lucide-react";
-import { DataTable } from "../../components/ui/data-table";
-import { IAnalyticsSummary, IEventData, IVisitorData } from "../types";
-import { eventColumns, visitorsColumns } from "./sections/data-table-columns";
-import PageViews from "./sections/page-views";
+import { IAnalyticsSummary, IEventData, IVisitorData } from "../../types";
+import Events from "./events/page";
+import PageViews from "./views/page";
+import Visitors from "./visitors/page";
 
-export default function FullDashboard({
+export default function TabsDashboard({
   visitors,
   events,
   summary,
@@ -52,13 +52,13 @@ export default function FullDashboard({
         </CardHeader>
         <CardContent className="h-full flex-1 overflow-auto">
           <TabsContent value="visitors" className="h-full flex-1">
-            <DataTable columns={visitorsColumns} data={visitors} />
+            <Visitors visitors={visitors} />
           </TabsContent>
           <TabsContent value="page-views" className="h-full flex-1">
             <PageViews summary={summary} />
           </TabsContent>
           <TabsContent value="events" className="h-full flex-1">
-            <DataTable columns={eventColumns} data={events} />
+            <Events events={events} />
           </TabsContent>
         </CardContent>
       </Tabs>

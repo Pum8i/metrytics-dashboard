@@ -1,12 +1,12 @@
 import { IAnalyticsSummary } from "@/app/types";
-import Tops from "@/app/dashboard/sections/tops";
 import React from "react";
 import TopChart from "./top-chart";
+import Tops from "./tops";
 
 export default function PageViews({ summary }: { summary: IAnalyticsSummary }) {
   return (
     <div className="flex flex-col md:flex-row w-full gap-4 h-full ">
-      <div className="flex flex-col md:flex-row md:w-2/3 gap-4">
+      <div className="flex flex-col md:w-2/3 gap-4">
         <Tops title="Top Referrers" tops={summary.topReferrers} />
         <Tops title="Top Pages" tops={summary.topPages} />
       </div>

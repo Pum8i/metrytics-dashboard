@@ -3,7 +3,7 @@ import { neon } from "@neondatabase/serverless";
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-http";
-import { IEventData, IKeyVisits, IVisitorData } from "../types";
+import { IEventData, IKeyVisits, IVisitorData } from "../app/types";
 
 const client = neon(`${process.env.POSTGRES_URL!}`);
 export const db = drizzle(client);

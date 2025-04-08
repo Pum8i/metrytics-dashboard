@@ -1,4 +1,4 @@
-import { addEvent, getEvents } from "@/app/lib/db";
+import { addEvent, getEvents } from "@/lib/db";
 import { IEventData } from "@/app/types";
 import { ipAddress } from "@vercel/functions";
 import { NextRequest, NextResponse } from "next/server";

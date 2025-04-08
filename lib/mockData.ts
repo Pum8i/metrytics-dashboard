@@ -1,4 +1,4 @@
-import { IVisitorData } from "../types";
+import { IVisitorData } from "../app/types";
 import { v4 as uuidv4 } from "uuid";
 
 function generateRandomIP() {

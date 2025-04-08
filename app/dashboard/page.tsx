@@ -3,8 +3,8 @@
 import NavBar from "@/app/dashboard/nav";
 import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
 import { useActionState, useEffect, useState } from "react";
-import { logout } from "../lib/actions";
-import FullDashboard from "./full-dashboard";
+import { logout } from "../../lib/actions";
+import TabsDashboard from "./tabs/page";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
@@ -91,7 +91,7 @@ export default function Dashboard() {
           </div>
         )}
         {summary && (
-          <FullDashboard
+          <TabsDashboard
             visitors={visitors}
             events={events}
             summary={summary}
