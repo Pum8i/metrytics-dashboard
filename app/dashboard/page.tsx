@@ -78,6 +78,11 @@ export default function Dashboard() {
 
   return (
     <main className="max-sm:min-h-screen md:h-screen md:max-h-screen">
+      {loading && (
+        <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
+          <div className="text-2xl font-semibold">Refreshing data...</div>
+        </div>
+      )}
       <NavBar
         formAction={formAction}
         isPending={isPending}
@@ -85,11 +90,6 @@ export default function Dashboard() {
         loading={loading}
       />
       <div className="container mx-auto px-2 pb-2 pt-16 h-dvh relative">
-        {loading && (
-          <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
-            <div className="text-2xl font-semibold">Refreshing data...</div>
-          </div>
-        )}
         {summary && (
           <TabsDashboard
             visitors={visitors}
