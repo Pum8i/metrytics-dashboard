@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/tabs";
 import { Activity, Users, View } from "lucide-react";
 import { IAnalyticsSummary, IEventData, IVisitorData } from "../../types";
-import Events from "./events/page";
-import PageViews from "./views/page";
-import Visitors from "./visitors/page";
+import Events from "./events/events-tab";
+import PageViews from "./views/views-tab";
+import Visitors from "./visitors/visitors-tab";
 
 export default function TabsDashboard({
   visitors,

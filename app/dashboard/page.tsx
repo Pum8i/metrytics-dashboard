@@ -1,10 +1,10 @@
 "use client";
 
-import NavBar from "@/app/dashboard/nav";
+import NavBar from "@/app/dashboard/components/nav";
 import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
 import { useActionState, useEffect, useState } from "react";
 import { logout } from "../../lib/actions";
-import TabsDashboard from "./tabs/page";
+import TabsDashboard from "./components/tabs";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
