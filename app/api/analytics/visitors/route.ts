@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
-import { addVisitor, getVisitors } from "@/app/lib/db";
-import { getLocationInfo } from "@/app/lib/utils";
+import { addVisitor, getVisitors } from "@/lib/db";
 import { ipAddress } from "@vercel/functions";
 import { IVisitorData } from "@/app/types";
+import { getLocationInfo } from "@/lib/utils";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
 export const runtime = "edge";

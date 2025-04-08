@@ -1,10 +1,10 @@
 "use client";
 
-import NavBar from "@/app/dashboard/nav";
+import NavBar from "@/app/dashboard/components/nav";
 import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
 import { useActionState, useEffect, useState } from "react";
-import { logout } from "../lib/actions";
-import FullDashboard from "./full-dashboard";
+import { logout } from "../../lib/actions";
+import TabsDashboard from "./components/tabs";
 
 export default function Dashboard() {
   const [visitors, setVisitors] = useState<IVisitorData[]>([]);
@@ -78,6 +78,11 @@ export default function Dashboard() {
 
   return (
     <main className="max-sm:min-h-screen md:h-screen md:max-h-screen">
+      {loading && (
+        <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
+          <div className="text-2xl font-semibold">Refreshing data...</div>
+        </div>
+      )}
       <NavBar
         formAction={formAction}
         isPending={isPending}
@@ -85,13 +90,8 @@ export default function Dashboard() {
         loading={loading}
       />
       <div className="container mx-auto px-2 pb-2 pt-16 h-dvh relative">
-        {loading && (
-          <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
-            <div className="text-2xl font-semibold">Refreshing data...</div>
-          </div>
-        )}
         {summary && (
-          <FullDashboard
+          <TabsDashboard
             visitors={visitors}
             events={events}
             summary={summary}

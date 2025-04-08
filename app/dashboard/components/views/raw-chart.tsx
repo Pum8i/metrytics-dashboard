@@ -1,3 +1,4 @@
+"use client";
 import { IKeyVisits } from "@/app/types";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -7,21 +8,16 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { useEffect, useRef, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export default function Tops({
+export default function RawChart({
   title,
-  tops,
+  data,
   className,
 }: {
   title: string;
-  tops: IKeyVisits[];
+  data: IKeyVisits[];
   className?: string;
 }) {
   return (
@@ -33,29 +29,29 @@ export default function Tops({
       </CardHeader>
       <CardContent className="text-sm">
         <ul className="space-y-4">
-          {tops.map((top, index) => (
+          {data.map((d, index) => (
             <li key={index} className="flex flex-col gap-2">
               <div className="flex w-full justify-between items-center gap-4">
-                <OverflowTooltip text={top.key} />
+                <OverflowTooltip text={d.key} />
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>{top.percent}%</TooltipTrigger>
+                    <TooltipTrigger>{d.percent}%</TooltipTrigger>
                     <TooltipContent className="bg-card text-card-foreground flex flex-col gap-4 rounded-xl border p-4 shadow-sm">
                       <div className="flex justify-between items-center gap-8">
                         <span>Percent:</span>
-                        <span>{top.percent}%</span>
+                        <span>{d.percent}%</span>
                       </div>
                       <div className="flex justify-between items-center gap-8">
                         <span>Visits:</span>
-                        <span>{top.visits}</span>
+                        <span>{d.visits}</span>
                       </div>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </div>
               <Progress
-                value={top.percent}
-                aria-label={`${top.key} progress - ${top.percent}%`}
+                value={d.percent}
+                aria-label={`${d.key} progress - ${d.percent}%`}
               />
             </li>
           ))}

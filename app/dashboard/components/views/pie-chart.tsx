@@ -34,7 +34,7 @@ const getChartConfig = (data: IKeyVisits[], label: string) => {
   );
 };
 
-export default function TopChart({
+export default function ViewsPieChart({
   data,
   label,
 }: {
@@ -52,9 +52,7 @@ export default function TopChart({
     };
   });
 
-  const totalVisits = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visits, 0);
-  }, []);
+  const totalVisits = chartData.reduce((acc, curr) => acc + curr.visits, 0);
 
   return (
     <Card className="h-full md:gap-1 pb-0">
