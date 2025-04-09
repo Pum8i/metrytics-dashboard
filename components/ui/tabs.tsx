@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -66,21 +66,21 @@ function TabsContent({
 function TabTrigger({
   title,
   value,
-  icon: Icon,
+  icon,
 }: {
   title: React.ReactNode;
   value: number;
-  icon?: React.ElementType;
+  icon?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col w-full h-full justify-center text-sm md:text-md">
       <div className="flex justify-center items-center gap-2">
         <div>{title}</div>
-        {Icon && <Icon className="max-sm:hidden" />}
+        {icon}
       </div>
       <p className="">{value}</p>
     </div>
   );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabTrigger, TabsContent };
+export { Tabs, TabsContent, TabsList, TabsTrigger, TabTrigger };

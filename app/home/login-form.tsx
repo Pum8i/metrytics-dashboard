@@ -113,6 +113,7 @@ export function LoginForm({
                   type="email"
                   name="email"
                   placeholder="mail@example.com"
+                  autoComplete="email"
                   required
                 />
               </div>
@@ -120,7 +121,13 @@ export function LoginForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" name="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  name="password"
+                  autoComplete="current-password"
+                  required
+                />
               </div>
               <div className="flex flex-col gap-3">
                 {isLogin && (

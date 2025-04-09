@@ -1,17 +1,11 @@
-import { NextRequest, NextResponse, userAgent } from "next/server";
-import { addVisitor, getVisitors } from "@/lib/db";
-import { ipAddress } from "@vercel/functions";
 import { IVisitorData } from "@/app/types";
+import { addVisitor } from "@/lib/db";
 import { getLocationInfo } from "@/lib/utils";
+import { ipAddress } from "@vercel/functions";
+import { NextRequest, NextResponse, userAgent } from "next/server";
 
 // import { generateMockVisitors } from "@/app/lib/mockData";
 export const runtime = "edge";
-
-export async function GET() {
-  // const visitors = generateMockVisitors(10);
-  const visitors = await getVisitors();
-  return NextResponse.json(visitors);
-}
 
 /**
  * Handles POST requests for analytics data collection.
@@ -43,8 +37,13 @@ export async function POST(request: NextRequest) {
     const referrerServer = requestHeaders.get("referrer") || "unknown";
 
     // https://vercel.com/docs/headers/request-headers
-    let cityServer = request.headers.get("x-vercel-ip-city") || "unknown";
-    let countryServer = request.headers.get("x-vercel-ip-country") || "unknown";
+    let cityServer =
+      request.headers.get("x-vercel-ip-city")?.replace(/%20/g, " ") ||
+      "unknown";
+
+    let countryServer =
+      request.headers.get("x-vercel-ip-country")?.replace(/%20/g, " ") ||
+      "unknown";
 
     const body = await request.json();
     const {
@@ -59,7 +58,6 @@ export async function POST(request: NextRequest) {
       timestamp,
     } = body;
 
-    // Validate the body
     if (!appName || !page) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -67,7 +65,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If we're passing in the ip address as part of the body, we're assuming that we're
+    // If we're passing in the ip address as part of the body, we're assuming that we want to get use it rather than the one in the header. A use-case might be when a server is sending data and we don't want the server IP address
     if (ip) {
       const { city, country } = await getLocationInfo(ip);
       cityServer = city;

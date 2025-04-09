@@ -1,17 +1,11 @@
-import { addEvent, getEvents } from "@/lib/db";
 import { IEventData } from "@/app/types";
+import { addEvent } from "@/lib/db";
 import { ipAddress } from "@vercel/functions";
 import { NextRequest, NextResponse } from "next/server";
 
 // import { generateMockEvents } from "@/app/lib/mockData";
 
 export const runtime = "edge";
-
-export async function GET() {
-  // const events = generateMockEvents(10);
-  const events = await getEvents();
-  return NextResponse.json(events);
-}
 
 /**
  * @description Handles POST requests for collecting event analytics data.

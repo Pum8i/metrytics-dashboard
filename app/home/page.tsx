@@ -1,10 +1,14 @@
-import Link from "next/link";
-import { Crosshair, MessageCircleWarning, SquareActivity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { getEvents } from "@/lib/db";
+import { Crosshair, MessageCircleWarning, SquareActivity } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const { allEvents } = await getEvents();
+  console.log(allEvents);
+
   return (
     <main className="min-h-screen ">
       <div className="container mx-auto px-4 py-8">
@@ -41,6 +45,7 @@ export default function Home() {
                   className="rounded-md w-full h-auto"
                   height={800}
                   width={1200}
+                  priority
                 />
               </CardContent>
             </Card>
@@ -103,7 +108,7 @@ const features = [
   },
   {
     icon: <Crosshair />,
-    title: "Custom Events (coming soon)",
+    title: "Custom Events",
     description:
       "Define and track specific user interactions to measure what matters to your business.",
   },
