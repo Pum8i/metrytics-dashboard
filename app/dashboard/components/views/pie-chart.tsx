@@ -57,7 +57,7 @@ export default function ViewsPieChart({
   return (
     <Card className="h-full md:gap-1 pb-0">
       <CardHeader className="items-center">
-        <CardTitle>
+        <CardTitle id="chart-title">
           Top {chartData.length} {label}
         </CardTitle>
       </CardHeader>
@@ -84,14 +84,8 @@ export default function ViewsPieChart({
               nameKey="key"
               innerRadius={40}
               outerRadius={60}
+              aria-labelledby="chart-title"
             >
-              {/* <LabelList
-                dataKey="visits"
-                className="fill-background"
-                stroke="none"
-                fontSize={10}
-                formatter={(value: number) => `${value}`}
-              /> */}
               <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
