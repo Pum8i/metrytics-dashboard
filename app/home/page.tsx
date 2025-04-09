@@ -10,7 +10,7 @@ export default async function Home() {
   console.log(allEvents);
 
   return (
-    <main className="min-h-screen ">
+    <main className="min-h-screen bg-gradient-to-b from-secondary to-background">
       <div className="container mx-auto px-4 py-8">
         <nav className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-2">
@@ -78,7 +78,7 @@ export default async function Home() {
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-xs">
-                  A
+                  M
                 </span>
               </div>
               <span className="text-foreground font-semibold">Metrytics</span>
