@@ -1,14 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getEvents } from "@/lib/db";
 import { Crosshair, MessageCircleWarning, SquareActivity } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
-  const { allEvents } = await getEvents();
-  console.log(allEvents);
-
   return (
     <main className="min-h-screen bg-gradient-to-b from-secondary to-background">
       <div className="container mx-auto px-4 py-8">
