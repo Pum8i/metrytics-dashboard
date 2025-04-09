@@ -1,102 +1,73 @@
-"use client";
-
 import NavBar from "@/app/dashboard/components/nav";
-import { IAnalyticsSummary, IEventData, IVisitorData } from "@/app/types";
-import { useActionState, useEffect, useState } from "react";
-import { logout } from "../../lib/actions";
+import { getEvents, getRecentVisitors, getVisitorAggregates } from "@/lib/db";
+import { IAllEventData, IVisitorAggregatesData, IVisitorData } from "../types";
 import TabsDashboard from "./components/tabs";
 
-export default function Dashboard() {
-  const [visitors, setVisitors] = useState<IVisitorData[]>([]);
-  const [events, setEvents] = useState<IEventData[]>([]);
+const defaultVisitorAggregates: IVisitorAggregatesData = {
+  pageViews: 0,
+  uniqueVisitors: 0,
+  referrers: [],
+  pages: [],
+  countries: [],
+  cities: [],
+};
+const defaultEventsData: IAllEventData = { allEvents: [], totalEvents: 0 };
+const defaultRecentVisitors: IVisitorData[] = [];
 
-  const [summary, setSummary] = useState<IAnalyticsSummary | null>(null);
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [, formAction, isPending] = useActionState(logout, undefined);
+export default async function Dashboard() {
+  let visitorAggregates: IVisitorAggregatesData = defaultVisitorAggregates;
+  let eventsData: IAllEventData = defaultEventsData;
+  let recentVisitors: IVisitorData[] = defaultRecentVisitors;
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [visitorsRes, eventsRes] = await Promise.all([
-        fetch("/api/analytics/visitors"),
-        fetch("/api/analytics/events"),
-      ]);
+  const results = await Promise.allSettled([
+    getVisitorAggregates(),
+    getEvents(),
+    getRecentVisitors(50),
+  ]);
 
-      if (!visitorsRes.ok || !eventsRes.ok) {
-        throw new Error("Failed to fetch data");
-      }
+  const aggregatesResult = results[0];
+  const eventsResult = results[1];
+  const recentVisitorsResult = results[2];
 
-      const [visitorsData, eventsData] = await Promise.all([
-        visitorsRes.json(),
-        eventsRes.json(),
-      ]);
+  if (aggregatesResult.status === "fulfilled" && aggregatesResult.value) {
+    visitorAggregates = aggregatesResult.value;
+  } else if (aggregatesResult.status === "rejected") {
+    console.error(
+      "Dashboard: Failed to fetch visitor aggregates -",
+      aggregatesResult.reason
+    );
+  }
 
-      const {
-        visitors,
-        pageViews,
-        uniqueVisitors,
-        pages,
-        referrers,
-        countries,
-        cities,
-      } = visitorsData;
+  if (eventsResult.status === "fulfilled" && eventsResult.value) {
+    eventsData = eventsResult.value;
+  } else if (eventsResult.status === "rejected") {
+    console.error(
+      "Dashboard: Failed to fetch events data -",
+      eventsResult.reason
+    );
+  }
 
-      const { allEvents, totalEvents } = eventsData;
-
-      setVisitors(visitors);
-      setEvents(allEvents);
-
-      setSummary({
-        countries,
-        cities,
-        totalEvents,
-        pageViews,
-        topReferrers: referrers,
-        topPages: pages,
-        uniqueVisitors,
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-      setInitialLoad(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  if (initialLoad) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-2xl font-semibold">Loading analytics data...</div>
-      </div>
+  if (
+    recentVisitorsResult.status === "fulfilled" &&
+    recentVisitorsResult.value
+  ) {
+    recentVisitors = recentVisitorsResult.value;
+  } else if (recentVisitorsResult.status === "rejected") {
+    console.error(
+      "Dashboard: Failed to fetch recent visitors -",
+      recentVisitorsResult.reason
     );
   }
 
   return (
     <main className="max-sm:min-h-screen md:h-screen md:max-h-screen">
-      {loading && (
-        <div className="flex h-full w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
-          <div className="text-2xl font-semibold">Refreshing data...</div>
-        </div>
-      )}
-      <NavBar
-        formAction={formAction}
-        isPending={isPending}
-        fetchData={fetchData}
-        loading={loading}
-      />
+      <NavBar />
       <div className="container mx-auto px-2 pb-2 pt-16 h-dvh relative">
-        {summary && (
-          <TabsDashboard
-            visitors={visitors}
-            events={events}
-            summary={summary}
-          />
-        )}
+        <TabsDashboard
+          visitors={recentVisitors}
+          visitorAggregates={visitorAggregates}
+          events={eventsData}
+        />
       </div>
     </main>
   );

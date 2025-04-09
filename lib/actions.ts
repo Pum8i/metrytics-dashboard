@@ -2,10 +2,15 @@
 
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
-import { z } from "zod";
-import { createUser, getUser } from "./db";
+import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
+import { z } from "zod";
+import { createUser, getUser } from "./db";
+
+export async function revalidateDashboardData() {
+  revalidatePath("/dashboard");
+}
 
 export async function authenticate(
   prevState: string | undefined,

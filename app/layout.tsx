@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -45,6 +46,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} sm:min-h-screen md:max-h-screen antialiased bg-gradient-to-b from-secondary to-background dark overflow-auto`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

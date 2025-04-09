@@ -1,18 +1,21 @@
-import Link from "next/link";
-import { Crosshair, MessageCircleWarning, SquareActivity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Crosshair, MessageCircleWarning, SquareActivity } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main className="min-h-screen ">
+    <main className="min-h-screen bg-gradient-to-b from-secondary to-background">
       <div className="container mx-auto px-4 py-8">
         <nav className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold">M</span>
-            </div>
+            <Image
+              src={"/favicon.svg"}
+              alt="Metrytics icon"
+              width={32}
+              height={32}
+            />
             <span className="text-xl font-bold text-foreground">Metrytics</span>
           </div>
           <div>
@@ -41,6 +44,7 @@ export default function Home() {
                   className="rounded-md w-full h-auto"
                   height={800}
                   width={1200}
+                  priority
                 />
               </CardContent>
             </Card>
@@ -71,11 +75,12 @@ export default function Home() {
         <footer className="pt-6 border-t border-border mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xs">
-                  A
-                </span>
-              </div>
+              <Image
+                src={"/favicon.svg"}
+                alt="Metrytics icon"
+                width={24}
+                height={24}
+              />
               <span className="text-foreground font-semibold">Metrytics</span>
             </div>
             <div className="text-sm text-muted-foreground">
@@ -103,7 +108,7 @@ const features = [
   },
   {
     icon: <Crosshair />,
-    title: "Custom Events (coming soon)",
+    title: "Custom Events",
     description:
       "Define and track specific user interactions to measure what matters to your business.",
   },

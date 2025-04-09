@@ -1,3 +1,8 @@
+export interface IKeyVisits {
+  key: string;
+  visits: number;
+  percent: number;
+}
 export interface IVisitorData {
   id: string;
   app_name: string;
@@ -11,20 +16,13 @@ export interface IVisitorData {
   timestamp: Date;
 }
 
-export interface IAnalyticsSummary {
+export interface IVisitorAggregatesData {
   pageViews: number;
   uniqueVisitors: number;
-  totalEvents: number;
-  topPages: IKeyVisits[];
-  topReferrers: IKeyVisits[];
+  referrers: IKeyVisits[];
+  pages: IKeyVisits[];
   countries: IKeyVisits[];
   cities: IKeyVisits[];
-}
-
-export interface IKeyVisits {
-  key: string;
-  visits: number;
-  percent: number;
 }
 
 export interface IEventData {
@@ -34,4 +32,9 @@ export interface IEventData {
   timestamp: Date;
   event: string;
   description: string | null | undefined;
+}
+
+export interface IAllEventData {
+  allEvents: IEventData[];
+  totalEvents: number;
 }

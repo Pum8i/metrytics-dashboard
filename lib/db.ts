@@ -1,70 +1,120 @@
 import { events, user, visitors } from "@/drizzle/schema";
 import { neon } from "@neondatabase/serverless";
 import { genSaltSync, hashSync } from "bcrypt-ts";
-import { desc, eq } from "drizzle-orm";
+import { count, countDistinct, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-http";
-import { IEventData, IKeyVisits, IVisitorData } from "../app/types";
+import {
+  IAllEventData,
+  IEventData,
+  IKeyVisits,
+  IVisitorData,
+} from "../app/types";
 
 const client = neon(`${process.env.POSTGRES_URL!}`);
 export const db = drizzle(client);
 
-function countAndSort(
-  items: IVisitorData[],
-  keyExtractor: (item: IVisitorData) => string,
-  totalVisitors: number
-): IKeyVisits[] {
-  const counts = items.reduce((map, item) => {
-    const key = keyExtractor(item);
-    map.set(key, (map.get(key) || 0) + 1);
-    return map;
-  }, new Map<string, number>());
-
-  return Array.from(counts)
-    .map(([key, visits]) => {
-      const percent = (visits / totalVisitors) * 100;
-      return {
-        key,
-        visits,
-        percent: parseFloat(percent.toFixed(1)),
-      };
-    })
-    .sort((a, b) => b.visits - a.visits);
-}
-
-export async function getVisitors(): Promise<{
-  visitors: IVisitorData[];
-  pageViews: number;
-  uniqueVisitors: number;
-  pages: IKeyVisits[];
-  referrers: IKeyVisits[];
-  cities: IKeyVisits[];
-  countries: IKeyVisits[];
-}> {
-  const allVisitors = await db
+export async function getRecentVisitors(
+  limit: number = 50,
+  offset: number = 0
+): Promise<IVisitorData[]> {
+  const recentVisitors = await db
     .select()
     .from(visitors)
-    .orderBy(desc(visitors.timestamp));
+    .orderBy(desc(visitors.timestamp))
+    .limit(limit)
+    .offset(offset);
+  return recentVisitors;
+}
 
-  const pageViews = allVisitors.length;
+export async function getVisitorAggregates(): Promise<{
+  pageViews: number;
+  uniqueVisitors: number;
+  referrers: IKeyVisits[];
+  pages: IKeyVisits[];
+  countries: IKeyVisits[];
+  cities: IKeyVisits[];
+}> {
+  const [
+    totalCountResult,
+    uniqueCountResult,
+    referrerCountsResult,
+    pageCountsResult,
+    countryCountsResult,
+    cityCountsResult,
+  ] = await Promise.all([
+    // 1. Total Page Views
+    db.select({ value: count() }).from(visitors),
 
-  const uniqueVisitors = new Set(allVisitors.map((v) => v.ip_address)).size;
+    // 2. Unique Visitors (by IP)
+    db.select({ value: countDistinct(visitors.ip_address) }).from(visitors),
 
-  const referrers = countAndSort(allVisitors, (v) => v.referrer, pageViews);
+    // 3. Referrer Counts
+    db
+      .select({
+        key: visitors.referrer,
+        visits: count(),
+      })
+      .from(visitors)
+      .groupBy(visitors.referrer)
+      .orderBy(desc(count())),
 
-  const pages = countAndSort(allVisitors, (v) => v.page, pageViews);
+    // 4. Page Counts
+    db
+      .select({
+        key: visitors.page,
+        visits: count(),
+      })
+      .from(visitors)
+      .groupBy(visitors.page)
+      .orderBy(desc(count())),
 
-  const countries = countAndSort(allVisitors, (v) => v.country, pageViews);
+    // 5. Country Counts
+    db
+      .select({
+        key: visitors.country,
+        visits: count(),
+      })
+      .from(visitors)
+      .groupBy(visitors.country)
+      .orderBy(desc(count())),
 
-  const cities = countAndSort(allVisitors, (v) => v.city, pageViews);
+    // 6. City Counts
+    db
+      .select({
+        key: visitors.city,
+        visits: count(),
+      })
+      .from(visitors)
+      .groupBy(visitors.city)
+      .orderBy(desc(count())),
+  ]);
+
+  const pageViews = totalCountResult[0]?.value ?? 0;
+  const uniqueVisitors = uniqueCountResult[0]?.value ?? 0;
+
+  const calculatePercentages = (
+    results: { key: string; visits: number }[],
+    total: number
+  ): IKeyVisits[] => {
+    if (total === 0) return results.map((r) => ({ ...r, percent: 0 }));
+    return results.map((item) => ({
+      ...item,
+      percent: parseFloat(((item.visits / total) * 100).toFixed(1)),
+    }));
+  };
+
+  const referrers = calculatePercentages(referrerCountsResult, pageViews);
+  const pages = calculatePercentages(pageCountsResult, pageViews);
+  const countries = calculatePercentages(countryCountsResult, pageViews);
+  const cities = calculatePercentages(cityCountsResult, pageViews);
 
   return {
-    cities,
-    countries,
-    pages,
-    referrers,
     pageViews,
     uniqueVisitors,
-    visitors: allVisitors,
+    referrers,
+    pages,
+    countries,
+    cities,
   };
 }
 
@@ -91,10 +141,7 @@ export async function createUser(email: string, password: string) {
   return await db.insert(user).values({ email, password: hash }).returning();
 }
 
-export async function getEvents(): Promise<{
-  allEvents: IEventData[];
-  totalEvents: number;
-}> {
+export async function getEvents(): Promise<IAllEventData> {
   const allEvents = await db
     .select()
     .from(events)
