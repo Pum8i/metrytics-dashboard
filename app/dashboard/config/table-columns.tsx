@@ -81,6 +81,10 @@ export const visitorsColumns: ColumnDef<IVisitorData>[] = [
     header: "Country",
   },
   {
+    accessorKey: "referrer",
+    header: "Referrer",
+  },
+  {
     accessorKey: "timestamp",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Time" />

@@ -46,7 +46,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} sm:min-h-screen md:max-h-screen antialiased bg-gradient-to-b from-secondary to-background dark overflow-auto`}
       >
         {children}
-        <Toaster expand position="top-center" />
+        <Toaster position="top-center" />
       </body>
     </html>
   );
