@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton"; // Make sure you have this component
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardLoading() {
   return (
@@ -9,8 +9,8 @@ export default function DashboardLoading() {
             Metrytics Dashboard
           </h1>
           <div className="flex gap-4">
-            <Skeleton className="h-9 w-34 rounded-md border" />
-            <Skeleton className="h-9 w-26 rounded-md border" />
+            <Skeleton className="h-9 w-10 md:w-36 rounded-md border" />
+            <Skeleton className="h-9 w-10 md:w-28 rounded-md border" />
           </div>
         </div>
       </div>
@@ -25,43 +25,16 @@ export default function DashboardLoading() {
             </Skeleton>
           </div>
 
-          <div className="px-6 flex-1 overflow-hidden flex flex-col">
-            <div className="flex flex-col h-full justify-between gap-4">
-              <div className="rounded-md border overflow-hidden h-full p-2 md:px-4 flex flex-col">
-                <div className="flex border-b">
-                  <Skeleton className="h-10 flex-1 px-2 py-3" />
-                  <Skeleton className="h-10 flex-1 px-2 py-3" />
-                  <Skeleton className="h-10 flex-1 px-2 py-3" />
-                  <Skeleton className="h-10 flex-1 px-2 py-3" />
-                  <Skeleton className="h-10 flex-1 px-2 py-3" />
-                </div>
-                <div className="flex-grow space-y-2 py-2">
-                  {Array.from({ length: 8 }).map((_, i) => (
-                    <div key={i} className="flex border-b border-transparent">
-                      <Skeleton className="h-8 flex-1 px-2 py-1" />
-                      <Skeleton className="h-8 flex-1 px-2 py-1" />
-                      <Skeleton className="h-8 flex-1 px-2 py-1" />
-                      <Skeleton className="h-8 flex-1 px-2 py-1" />
-                      <Skeleton className="h-8 flex-1 px-2 py-1" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="flex items-center justify-end py-1">
-                <div className="flex items-center gap-x-2 md:gap-x-4 lg:gap-x-6">
-                  <div className="flex items-center gap-x-2">
-                    <Skeleton className="h-5 w-20" />{" "}
-                    <Skeleton className="h-8 w-[70px]" />
-                  </div>
-                  <Skeleton className="h-5 w-[100px]" />
-                  <div className="flex items-center gap-x-2">
-                    <Skeleton className="hidden h-8 w-8 p-0 lg:flex" />{" "}
-                    <Skeleton className="h-8 w-8 p-0" />
-                    <Skeleton className="h-8 w-8 p-0" />
-                    <Skeleton className="hidden h-8 w-8 p-0 lg:flex" />{" "}
-                  </div>
-                </div>
-              </div>
+          <div className="px-6 flex-1 overflow-hidden flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:w-2/3 gap-4 h-full">
+              <Skeleton className="rounded-xl border h-1/2 w-full flex flex-col"></Skeleton>
+
+              <Skeleton className="rounded-xl border h-1/2 w-full flex flex-col"></Skeleton>
+            </div>
+
+            <div className="flex flex-col md:w-1/3 gap-4 h-full">
+              <Skeleton className="rounded-xl border h-1/2 w-full flex flex-col pb-0"></Skeleton>
+              <Skeleton className="rounded-xl border h-1/2 w-full flex flex-col pb-0"></Skeleton>
             </div>
           </div>
         </div>
