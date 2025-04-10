@@ -17,6 +17,8 @@ export default function NavBar() {
   const [isRefreshPending, startRefreshTransition] = useTransition();
 
   const handleRefreshClick = () => {
+    toast.info("Updating data.");
+
     startRefreshTransition(async () => {
       try {
         await revalidateDashboardData();
@@ -32,11 +34,9 @@ export default function NavBar() {
 
   return (
     <nav className="fixed w-full backdrop-blur-3xl z-50 h-16 px-2 sm:px-4">
-      {(isRefreshPending || isLogoutPending) && (
+      {isLogoutPending && (
         <div className="flex h-dvh w-full z-50 items-center justify-center absolute inset-0 bg-background/50">
-          <div className="text-2xl font-semibold">
-            {isRefreshPending ? "Refreshing data..." : "Logging out..."}
-          </div>
+          <div className="text-2xl font-semibold">Logging out...</div>
         </div>
       )}
       <div className="m-auto py-3 flex items-end justify-between gap-4">
