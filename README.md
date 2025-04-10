@@ -75,4 +75,5 @@ To learn more about the technologies used in this project:
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Drizzle ORM Documentation](https://orm.drizzle.team/docs/overview)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [shadcn/ui Documentation](https://ui.shadcn.com)
+- [shadcn/ui](https://ui.shadcn.com)
+- [NextAuth.js](https://next-auth.js.org/)

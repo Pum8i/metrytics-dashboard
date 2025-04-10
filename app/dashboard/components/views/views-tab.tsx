@@ -16,8 +16,8 @@ export default function PageViews({
       <div className="flex flex-col md:w-1/3 h-full gap-4">
         <PieChart data={visitors.countries.slice(0, 5)} label="Countries" />
         <PieChart data={visitors.cities.slice(0, 5)} label="Cities" />
-        {/* <Tops title="Top Countries" tops={summary.countries} /> */}
-        {/* <Tops title="Top Cities" tops={summary.cities} /> */}
+        {/* <RawChart title="Top Countries" tops={summary.countries} /> */}
+        {/* <RawChart title="Top Cities" tops={summary.cities} /> */}
       </div>
     </div>
   );

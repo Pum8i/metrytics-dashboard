@@ -6,7 +6,6 @@ export default {
   schema: "./drizzle/schema.ts",
   dialect: "postgresql",
   out: "./drizzle/migrations",
-  // driver: "pglite",
   dbCredentials: {
     url: process.env.DATABASE_URL_UNPOOLED!,
   },
