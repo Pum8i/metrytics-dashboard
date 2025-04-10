@@ -137,6 +137,7 @@ export function LoginForm({
                   type={isPending ? "button" : "submit"}
                   className="w-full"
                   aria-disabled={isPending}
+                  disabled={isPending}
                 >
                   {button}
                 </Button>
